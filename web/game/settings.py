@@ -1,7 +1,10 @@
 # Django settings for game project.
+import os as _os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+HOMEDIR = _os.path.abspath(_os.path.join(__file__, '../..'))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -59,7 +62,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/home/ado/projects/game/'
+STATIC_ROOT = _os.path.normpath(_os.path.join(HOMEDIR, '../htdocs/'))
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -67,6 +70,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    _os.path.normpath(_os.path.join(HOMEDIR, '../static')),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -106,7 +110,7 @@ ROOT_URLCONF = 'game.urls'
 WSGI_APPLICATION = 'game.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/home/ado/projects/game/templates'
+    _os.path.join(HOMEDIR, '../templates')
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
