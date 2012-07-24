@@ -13,14 +13,15 @@ Old-school game.
 
 ## Installing
 
-> virtualenv .env
-> source .env/bin/activate
-> pip install -r requrements.txt
+    virtualenv .env
+    source .env/bin/activate
+    pip install -r requrements.txt
 
 ## Running
 
 Currently in dev mode using django runserver
-> ./web/manage.py runserver
+    
+    ./web/manage.py runserver
 
 
 
