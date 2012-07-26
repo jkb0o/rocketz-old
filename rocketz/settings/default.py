@@ -1,4 +1,5 @@
 import os
+import logging
 
 HOME = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..')
 
@@ -10,3 +11,8 @@ APPLICAION_JOBS = [
 ]
 
 LISTEN = 'localhost:31337'
+
+LOG_FILE = os.path.join(HOME, 'tmp/rocketz.log')
+LOG_LEVEL = logging.DEBUG
+LOG_FORMAT = '%(asctime)s:%(levelname)s:%(name)s:%(message)s'
+

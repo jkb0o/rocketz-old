@@ -1,5 +1,5 @@
 from .utils import load_class
-from . import settings
+from .conf import settings
 
 def launch():
     from gevent import monkey

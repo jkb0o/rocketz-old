@@ -1,8 +1,8 @@
 import gevent
 from ws4py.server.geventserver import WebSocketServer
-from ws4py.websocket import EchoWebSocket
+from ws4py.websocket import WebSocket
 
-from rocketz import settings
+from .conf import settings
 
 
 def run_server():
@@ -12,6 +12,9 @@ def run_server():
     server.serve_forever()
 
 
-class Dispatcher(EchoWebSocket):
-    pass
+class Dispatcher(WebSocket):
+
+    def received_message(self, message):
+        print "C> %s" % message
+        self.send(message, binary=True)
     

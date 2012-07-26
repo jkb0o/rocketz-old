@@ -1,10 +1,11 @@
 import errno
+import logging
 import os
 import signal
 import sys
 import time
 
-from . import settings
+from .conf import settings
 
 class Daemon(object):
     
@@ -32,15 +33,28 @@ class Daemon(object):
             self.write_pid(pid)
             print "Rocketz started (pid %s)" % pid
         else:
-            self.init_std_log()
+            self.setup_logging()
             self.run()
 
     def run(self):
         from . import app
         app.launch()
 
-    def init_std_log(self):
-        pass
+    def setup_logging(self):
+        logging.basicConfig(
+            level=settings.LOG_LEVEL,
+            format=settings.LOG_FORMAT,
+            filename=settings.LOG_FILE,
+            filemode='a'
+        )
+
+        stdout_logger = logging.getLogger('STDOUT')
+        sl = StreamLogger(stdout_logger, logging.DEBUG)
+        sys.stdout = sl
+         
+        stderr_logger = logging.getLogger('STDERR')
+        sl = StreamLogger(stderr_logger, logging.ERROR)
+        sys.stderr = sl
 
     def pid_file(self, mode='r'):
         pid_file = settings.PID_FILE
@@ -95,7 +109,15 @@ class Daemon(object):
             return "Rocketz is down"
         
 
-
-
-            
-
+class StreamLogger(object):
+   """
+   Fake file-like stream object that redirects writes to a logger instance.
+   """
+   def __init__(self, logger, log_level=logging.INFO):
+      self.logger = logger
+      self.log_level = log_level
+      self.linebuf = ''
+ 
+   def write(self, buf):
+      for line in buf.rstrip().splitlines():
+         self.logger.log(self.log_level, line.rstrip())

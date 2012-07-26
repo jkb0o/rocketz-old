@@ -1,8 +1,8 @@
-connection = new WebSocket('ws://10.1.22.71:31338');
+connection = new WebSocket('ws://localhost:31337');
 
 // When the connection is open, send some data to the server
 connection.onopen = function () {
-  //connection.send('Ping'); // Send the message 'Ping' to the server
+    console.log('Connection opened')
 };
 
 // Log errors
