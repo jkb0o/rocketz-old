@@ -28,3 +28,4 @@ pip-log.txt
 
 # vim swap files
 *.sw[po]
+.ropeproject
