@@ -4,7 +4,9 @@ from ws4py.websocket import WebSocket
 
 from .conf import settings
 from .physics import world
+from .scene import GameObject
 
+clients = []
 
 def run_server():
     host, port = settings.LISTEN.split(':')
@@ -15,24 +17,15 @@ def run_server():
 
 class Dispatcher(WebSocket):
     
-    body = None
-    box = None
+    def __init__(self, *args, **kwargs):
+        super(Dispatcher, self).__init__(*args, **kwargs)
+        clients.append(self)
+
     def opened(self):
-        body = world.CreateDynamicBody(position=(0, 4))
-        box = body.CreatePolygonFixture(box=(1,1), density=1, friction=0.3)
-        self.body = body
-        self.box = box
-        gevent.spawn(self.notify_position)
-
-
+        for x in (2,3,4):
+            obj = GameObject()
+            obj.body.position = x, x
+    
     def received_message(self, message):
         print "C> %s" % message
         self.send(message, binary=True)
-
-    def notify_position(self):
-        vx, vy = 1, 1
-        while vx or vy:
-            x, y = self.body.position
-            self.send("Position: %0.3f, %0.3f" % (x,y))
-            gevent.sleep(0.1)
-            vx, vy = self.body.linearVelocity
