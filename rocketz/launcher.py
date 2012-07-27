@@ -6,8 +6,9 @@ import sys
 import time
 
 from .conf import settings
+from .utils import import_object
 
-class Daemon(object):
+class Launcher(object):
     
     def __init__(self):
         pass
@@ -22,7 +23,7 @@ class Daemon(object):
         """
 
         if not detach:
-            self.run()
+            self.do_start()
         if self.is_running():
             print "Rocketz already started (pid %s)" % self.pid
             return
@@ -34,12 +35,16 @@ class Daemon(object):
             print "Rocketz started (pid %s)" % pid
         else:
             self.setup_logging()
-            self.run()
+            self.do_start()
 
-    def run(self):
-        from . import app
-        app.launch()
+    def do_start(self):
+        from gevent import monkey
+        monkey.patch_all()
 
+        for job_name in settings.APPLICAION_JOBS:
+            job = import_object(job_name)
+            job()
+        
     def setup_logging(self):
         logging.basicConfig(
             level=settings.LOG_LEVEL,

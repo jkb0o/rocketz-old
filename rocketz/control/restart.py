@@ -1,8 +1,8 @@
-from ..daemon import Daemon
+from ..launcher import Launcher
 from . import Arg, Help
 
 @Help("Restarts rocketz battle server")
 def execute(options):
-    daemon = Daemon()
-    if daemon.stop():
-        daemon.start()
+    launcher = Launcher()
+    if launcher.stop():
+        launcher.start()

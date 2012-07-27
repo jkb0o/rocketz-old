@@ -1,6 +1,6 @@
 from importlib import import_module
 
-def load_class(path):
+def import_object(path):
     path, class_name = path.rsplit('.', 1)
     module = import_module(path)
     return getattr(module , class_name)
