@@ -17,14 +17,16 @@ def run_server():
 
 class Dispatcher(WebSocket):
     
-    def __init__(self, *args, **kwargs):
-        super(Dispatcher, self).__init__(*args, **kwargs)
-        clients.append(self)
-
     def opened(self):
+        clients.append(self)
         for x in (2,3,4):
             obj = GameObject()
             obj.body.position = x, x
+
+    def closed(self, code, reason="Not defined"):
+        print "Client closed connection (%d, reason: %s)" % (code, reason)
+        clients.remove(self)
+        
     
     def received_message(self, message):
         print "C> %s" % message
