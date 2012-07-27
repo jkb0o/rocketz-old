@@ -5,6 +5,8 @@ import signal
 import sys
 import time
 
+import gevent
+
 from .conf import settings
 from .utils import import_object
 
@@ -40,10 +42,14 @@ class Launcher(object):
     def do_start(self):
         from gevent import monkey
         monkey.patch_all()
-
+        
+        jobs = []
         for job_name in settings.APPLICAION_JOBS:
-            job = import_object(job_name)
-            job()
+            runner = import_object(job_name)
+            job = runner()
+            if job is not None:
+                jobs.append(job)
+        gevent.joinall(jobs)
         
     def setup_logging(self):
         logging.basicConfig(

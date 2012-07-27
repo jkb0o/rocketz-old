@@ -2,6 +2,10 @@
 rocketz/control contain scripts which be used by rctl tool.
 To execute rocketz/control/start.py you need to call:
 > ./rctl rs start
+
+Help() and Arg() decorators used to simplify definitoion of 
+argparse module. Look at start command. It accepts --fg 
+argument from command line ( ./rctl rs start --fg )
 """
 import argparse
 from functools import wraps
