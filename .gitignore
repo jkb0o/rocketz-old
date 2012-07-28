@@ -32,3 +32,4 @@ pip-log.txt
 tmp
 .env
 rocketz/settings/local.py
+web/game/settings_local.py

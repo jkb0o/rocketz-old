@@ -158,3 +158,11 @@ LOGGING = {
         },
     }
 }
+WEBSOCKET = {
+    'socket': 'localhost:31337'
+}
+
+try:
+    from game.settings_local import *
+except ImportError as e:
+    print e

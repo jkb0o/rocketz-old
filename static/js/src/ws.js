@@ -1,4 +1,4 @@
-connection = new WebSocket('ws://localhost:31337');
+connection = new WebSocket('ws://' + CONFIG.ws);
 
 // When the connection is open, send some data to the server
 connection.onopen = function () {
@@ -22,10 +22,8 @@ function dispatch (data){
 	var target	= null;
 
 	if (data.message == "obj_created") target = stage.get('.battle')[0];
-	console.log(data.data.obj);
 	if (data.message == "move") {
 		target = stage.get('.battle')[0].get('.'+data.data.obj)[0]
-		console.log(target, data.message);
 	}
 	if (!target)	return;
 	target[data.message](data.data);
