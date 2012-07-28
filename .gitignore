@@ -30,3 +30,5 @@ pip-log.txt
 *.sw[po]
 .ropeproject
 tmp
+.env
+rocketz/settings/local.py
