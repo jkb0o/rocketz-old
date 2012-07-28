@@ -4,6 +4,7 @@ import gevent
 import Box2D
 from Box2D import b2 as box2d
 
+
 world = box2d.world()
 ground = world.CreateStaticBody(
     position=(0, -10),
@@ -11,6 +12,7 @@ ground = world.CreateStaticBody(
 )
 
 from .conf import settings
+from .scene import scene
 
 def start_simulation():
     return gevent.spawn(simulate)
@@ -30,5 +32,8 @@ def simulate():
         #print "Time delta: %0.3f" % time_delta
 
 def do_simulate_step(time_delta):
-   world.Step(time_delta, settings.PHYSICS_ITERATIONS_VEL, settings.PHYSICS_ITERATIONS_POS)
-   world.ClearForces()
+    for game_obj in scene:
+        game_obj.update(time_delta)
+
+    world.Step(time_delta, settings.PHYSICS_ITERATIONS_VEL, settings.PHYSICS_ITERATIONS_POS)
+    world.ClearForces()

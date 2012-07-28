@@ -17,7 +17,7 @@ def render_network():
     start = time.time()
     while True:
         # job code
-        for game_obj in scene.values():
+        for game_obj in scene:
             if not game_obj.renderer:
                 game_obj.renderer = NetworkRenderer(game_obj)
 
@@ -52,11 +52,17 @@ class NetworkRenderer(object):
         )
 
         for client in clients:
-            client.send(message)
-
-        
-
-
-
-
-
+            client.send(
+                "move", 
+                obj=self.obj.id,
+                pos=[
+                    body.position[0], 
+                    body.position[1],
+                    body.angle
+                ],
+                vel=[
+                    body.linearVelocity[0], 
+                    body.linearVelocity[1],
+                    body.angularVelocity
+                ]
+            )

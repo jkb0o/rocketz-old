@@ -1,10 +1,12 @@
+import json
+
 import gevent
 from ws4py.server.geventserver import WebSocketServer
 from ws4py.websocket import WebSocket
 
 from .conf import settings
 from .physics import world
-from .scene import GameObject
+from .scene import scene
 
 clients = []
 
@@ -17,17 +19,41 @@ def run_server():
 
 class Dispatcher(WebSocket):
     
+    scene_listeners = []
+    
     def opened(self):
         clients.append(self)
-        for x in (2,3,4):
-            obj = GameObject()
-            obj.body.position = x, x
+
+        self.scene_listeners = [
+            scene.add_listener('object_added', self.notify_creation),
+            scene.add_listener('object_removed', self.notify_remove),
+        ]
+
+        import random
+        position = 1 + 5 * random.random(), 1 + 5 * random.random()
+        obj = scene.create_object('rocketz.scene.GameObject')
+        obj.body.position = position
+        self.obj = obj
 
     def closed(self, code, reason="Not defined"):
         print "Client closed connection (%d, reason: %s)" % (code, reason)
+        for listener in self.scene_listeners:
+            scene.clear_listener(listener)
         clients.remove(self)
+        self.obj.remove()
+        del self.obj
+
+    def send(self, msg, **kwargs):
+        data = json.dumps(dict(message=msg, data=kwargs))
+        super(Dispatcher, self).send(data)
         
     
     def received_message(self, message):
         print "C> %s" % message
-        self.send(message, binary=True)
+        #self.send(message, binary=True)
+
+    def notify_creation(self, obj):
+        self.send("obj_created", id=obj.id)
+
+    def notify_remove(self, obj):
+        self.send("obj_removed", id=obj.id)

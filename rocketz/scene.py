@@ -1,8 +1,53 @@
+from weakref import WeakSet
+
+from .event import Eventable
 from .physics import world
+from .utils import import_object
 
-scene = {}
+class Scene(Eventable):
+    
+    def __init__(self):
+        super(Scene, self).__init__()
+        self.objects = {}
+        self.classes = {}
 
-class GameObject(object):
+    def create_object(self, cls):
+        """
+        Factory method.
+        Usage:
+            obj = scene.create_object('rocketz.scene.GameObject')
+        """
+        if cls not in self.classes:
+            self.classes[cls] = import_object(cls)
+
+        obj = self.classes[cls]()
+        self.add_object(obj)
+
+        return obj
+
+
+    def add_object(self, obj):
+        """
+        Add object to scene
+        Object should be instance of GameObject
+        """
+        if not isinstance(obj, GameObject):
+            raise TypeError("Unable to add %s to scene" % obj)
+
+        self.objects[obj.id] = obj
+        self.fire_event("object_added", obj=obj)
+
+    def remove_object(self, obj):
+        obj.fire_event("before_remove")
+        del self.objects[obj.id]
+        self.fire_event("object_removed", obj=obj)
+        obj.fire_event("after_remove")
+
+    def __iter__(self):
+        for obj in self.objects.values():
+            yield obj
+
+class GameObject(Eventable):
     
     """
     Do not create body if create_body = False
@@ -21,19 +66,27 @@ class GameObject(object):
     renderer = None
 
     _last_id = 1
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
+        super(GameObject, self).__init__()
         # init body
         if self.create_body:
             self.body = world.CreateDynamicBody(userData=self)
             self.body.CreatePolygonFixture(**self.fixture_property)
 
-        
         # generate unique id
         self.id = GameObject._last_id
         GameObject._last_id += 1
 
-        # add to scene
-        scene[self.id] = self
+    def remove(self):
+        """
+        Remove object from scene
+        """
+        scene.remove_object(self)
+
+
+    def update(self, delta):
+        pass
 
 
 
+scene = Scene()
