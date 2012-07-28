@@ -31,10 +31,14 @@ class Dispatcher(WebSocket):
         ]
 
         import random
-        position = 1 + 5 * random.random(), 1 + 5 * random.random()
+        position = 10, 6
         obj = scene.create_object('rocketz.scene.GameObject')
         obj.body.position = position
-        obj.body.ApplyTorque(20 - 40*random.random())
+        obj.body.angle = 3.14 * random.random()
+        obj.body.linearVelocity = [
+            20 - 40 * random.random(),
+            20 - 40 * random.random(),
+        ]
         self.obj = obj
 
     def closed(self, code, reason="Not defined"):

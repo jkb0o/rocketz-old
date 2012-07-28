@@ -18,7 +18,7 @@ LOG_LEVEL = logging.DEBUG
 LOG_FORMAT = '%(asctime)s:%(levelname)s:%(name)s:%(message)s'
 
 PHYSICS_ITERATIONS = 15.0       # Number of physics iterations per second
-PHYSICS_ITERATIONS_VEL = 6      # Number of velocity iterations inside 1 physics iteration
-PHYSICS_ITERATIONS_POS = 2      # Number of position iteration inside 1 physics iteration
+PHYSICS_ITERATIONS_VEL = 10     # Number of velocity iterations inside 1 physics iteration
+PHYSICS_ITERATIONS_POS = 10     # Number of position iteration inside 1 physics iteration
 
 RENDER_NETWORK_ITERATIONS = 31.0

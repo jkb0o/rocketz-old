@@ -1,4 +1,4 @@
-connection = new WebSocket('ws://91.225.236.227:31337');
+connection = new WebSocket('ws://localhost:31337');
 
 // When the connection is open, send some data to the server
 connection.onopen = function () {

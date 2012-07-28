@@ -60,7 +60,7 @@ class GameObject(Eventable):
     """
     This attributes will be passed to body.CreatePolygonFixture
     """
-    fixture_property = dict(box=(1,1), density=1, friction=0.3)
+    fixture_property = dict(box=(0.5,0.5), density=0.2, friction=0.9)
 
     """
     currently it only can by rocketz.renderer.NetworkRenderer

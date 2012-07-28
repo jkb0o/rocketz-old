@@ -27,7 +27,7 @@ pip-log.txt
 .mr.developer.cfg
 
 # vim swap files
-*.sw[po]
+*.sw[pon]
 .ropeproject
 tmp
 .env

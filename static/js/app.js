@@ -2,8 +2,8 @@ $(function(){
 	
 	stage	= new Kinetic.Stage({
 		container	: 'workspace',
-		width		: window.innerWidth-20,
-		height		: window.innerHeight-35
+		width		: 1000,
+		height		: 600
 	});
 
 	console.log(stage)

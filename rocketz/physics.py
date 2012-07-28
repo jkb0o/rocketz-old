@@ -6,9 +6,21 @@ from Box2D import b2 as box2d
 
 
 world = box2d.world()
-ground = world.CreateStaticBody(
-    position=(0, -10),
-    shapes=(box2d.polygonShape(box=(50,10)))
+world.CreateStaticBody(
+    position=(10, -1),
+    shapes=(box2d.polygonShape(box=(10,1)))
+)
+world.CreateStaticBody(
+    position=(10, 13),
+    shapes=(box2d.polygonShape(box=(10,1)))
+)
+world.CreateStaticBody(
+    position=(21, 6),
+    shapes=(box2d.polygonShape(box=(1,6)))
+)
+world.CreateStaticBody(
+    position=(-1, 6),
+    shapes=(box2d.polygonShape(box=(1,6)))
 )
 
 from .conf import settings
