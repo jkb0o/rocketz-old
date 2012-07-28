@@ -40,6 +40,8 @@ class Scene(Eventable):
     def remove_object(self, obj):
         obj.fire_event("before_remove")
         del self.objects[obj.id]
+        world.DestroyBody(obj.body)
+        obj.body = None
         self.fire_event("object_removed", obj=obj)
         obj.fire_event("after_remove")
 
