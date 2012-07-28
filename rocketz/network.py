@@ -20,6 +20,7 @@ def run_server():
 class Dispatcher(WebSocket):
     
     scene_listeners = []
+    obj = None
     
     def opened(self):
         clients.append(self)
@@ -36,12 +37,13 @@ class Dispatcher(WebSocket):
         self.obj = obj
 
     def closed(self, code, reason="Not defined"):
-        print "Client closed connection (%d, reason: %s)" % (code, reason)
+        print "Client %s closed connection (%d, reason: %s)" % (self, code, reason)
         for listener in self.scene_listeners:
             scene.clear_listener(listener)
         clients.remove(self)
-        self.obj.remove()
-        del self.obj
+        if self.obj:
+            self.obj.remove()
+            del self.obj
 
     def send(self, msg, **kwargs):
         data = json.dumps(dict(message=msg, data=kwargs))

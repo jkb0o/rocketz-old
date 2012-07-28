@@ -2,7 +2,7 @@ from weakref import WeakSet
 
 class Eventable(object):
     
-    _last_listener_id = 1
+    _last_listener_id = 0
 
     def __init__(self):
         
@@ -20,8 +20,8 @@ class Eventable(object):
             self._listeners[event_name] = WeakSet()
 
         self._listeners[event_name].add(listener)
-        self._listeners[Eventable._last_listener_id] = listener
         Eventable._last_listener_id += 1
+        self._listeners[Eventable._last_listener_id] = listener
         return Eventable._last_listener_id
 
     def clear_listener(self, listener_id):
