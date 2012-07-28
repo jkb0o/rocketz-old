@@ -24,7 +24,9 @@ $(function(){
 	
 	document.body.addEventListener('keydown', function(e){
 		var code	= e.keyCode;
-		var codes	= [null,87,65,83,68];
+		var codes	= [87,65,83,68];
+
+        var oldMask = mask;
         
         for (var i = 0; i < codes.length; i++){
             var item    = codes[i];
@@ -34,12 +36,16 @@ $(function(){
             mask = mask | Math.pow(2, i);
         };
 
+        if (mask == oldMask)    return;
+
         connection.send(JSON.stringify({message: 'changeKeys', data: mask}));
 	});
 
 	document.body.addEventListener('keyup', function(e){
 		var code	= e.keyCode;
-		var codes	= [null,87,65,83,68];
+		var codes	= [87,65,83,68];
+
+        var oldMask = mask;
         
         for (var i = 0; i < codes.length; i++){
             var item    = codes[i];
@@ -48,6 +54,8 @@ $(function(){
 
             mask -= Math.pow(2, i);
         };
+
+        if (mask == oldMask)    return;
         
         connection.send(JSON.stringify({message: 'changeKeys', data: mask}));
 	});
