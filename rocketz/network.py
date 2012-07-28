@@ -57,6 +57,9 @@ class Dispatcher(WebSocket):
     
     def received_message(self, message):
         print "C> %s" % message
+        message = json.loads(str(message))
+        if message['message'] == 'changeKeys':
+            self.obj.keys = message['data']
         #self.send(message, binary=True)
 
     def notify_creation(self, obj):

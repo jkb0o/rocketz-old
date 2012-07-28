@@ -1,7 +1,7 @@
 from weakref import WeakSet
 
 from .event import Eventable
-from .physics import world
+from .physics import world, box2d
 from .utils import import_object
 
 class Scene(Eventable):
@@ -67,6 +67,14 @@ class GameObject(Eventable):
     """
     renderer = None
 
+
+    # remove keys from here to child class
+    keys = 0
+    KEY_W = 0b0001
+    KEY_A = 0b0010
+    KEY_S = 0b0100
+    KEY_D = 0b1000
+
     _last_id = 1
     def __init__(self):
         super(GameObject, self).__init__()
@@ -87,7 +95,22 @@ class GameObject(Eventable):
 
 
     def update(self, delta):
-        pass
+        if not self.keys: return
+        
+        force = box2d.vec2()
+        if self.keys & self.KEY_W:
+            force.y = 1
+        elif self.keys & self.KEY_S:
+            force.y = -1
+        if self.keys & self.KEY_A:
+            force.x = -1
+        elif self.keys & self.KEY_D:
+            force.x = 1
+
+        force /= float(force.length)
+        force *= 15
+        self.body.ApplyForce(force, self.body.position)
+        
 
 
 
