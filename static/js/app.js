@@ -1,12 +1,12 @@
 $(function(){
-	
+    
+    mask    = 0;
+
 	stage	= new Kinetic.Stage({
 		container	: 'workspace',
 		width		: window.innerWidth-20,
 		height		: window.innerHeight-35
 	});
-
-	console.log(stage)
 
 	var back	= new Rocketz.background.main({name: 'background'});
 	var battle	= new Rocketz.battle.main({name: 'battle'});
@@ -22,21 +22,35 @@ $(function(){
 
 	stage.start()
 	
-		document.body.addEventListener('keydown', function(e){
-			var code	= e.keyCode;
-			var codes	= [87,65,83,68];
+	document.body.addEventListener('keydown', function(e){
+		var code	= e.keyCode;
+		var codes	= [null,87,65,83,68];
+        
+        for (var i = 0; i < codes.length; i++){
+            var item    = codes[i];
 
-			codes.map(function(elem, i){if(elem === code && !(mask & Math.pow(2, i+1))) mask += Math.pow(2, i+1)});
-			
-			
-		});
+            if (code != item)           continue;
+            
+            mask = mask | Math.pow(2, i);
+        };
 
-		document.body.addEventListener('keyup', function(e){
-			var code	= e.keyCode;
-			var codes	= [87,65,83,68];
-			console.log('keyup')
-			codes.map(function(elem, i){if(elem === code && mask & Math.pow(2, i+1)) mask -= Math.pow(2, i+1)});
-		});
+        connection.send(JSON.stringify({message: 'changeKeys', data: mask}));
+	});
+
+	document.body.addEventListener('keyup', function(e){
+		var code	= e.keyCode;
+		var codes	= [null,87,65,83,68];
+        
+        for (var i = 0; i < codes.length; i++){
+            var item    = codes[i];
+
+            if (code != item)           continue;
+
+            mask -= Math.pow(2, i);
+        };
+        
+        connection.send(JSON.stringify({message: 'changeKeys', data: mask}));
+	});
 
 
 });

@@ -158,3 +158,8 @@ LOGGING = {
         },
     }
 }
+
+try:
+    from game.settings_local import *
+except ImportError as e:
+    print e
