@@ -17,28 +17,32 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
             var y       = child.getY() - vy * diff * 0.001;
             var r       = child.getRotation() + vr * diff * 0.001;
 
-            child.setX(x);
-            child.setY(y);
+            //child.setX(x);
+            //child.setY(y);
+            //child.x     = x;
+            //child.y     = y;
             child.setRotation(r);
         }
 	},
 	obj_created: function(data){
 		var object	= new Kinetic.Rect({
-			x: 0,
-			y: 0,
+			x: 500,
+			y: 300,
 			width: 50,
 			height: 50,
 			fill: 'black',
-			name: data.id
+			name: data.id,
+            self: true
 		});
         object.setOffset(25, 25)
 		
 		object.move	= function(data){
 			var pos	= data.pos;
-
 			
-			this.setX(pos[0] * 50);
-			this.setY(stage.getHeight() - pos[1] * 50);
+			//this.setX(pos[0] * 50);
+			//this.setY(stage.getHeight() - pos[1] * 50);
+            this.x = pos[0] * 50;
+            this.y = stage.getHeight() - pos[1] * 50;
             this.setRotation(pos[2]);
 
             this.userData   = data;

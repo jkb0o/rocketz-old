@@ -15,9 +15,9 @@ $(function(){
 	stage.add(battle);
 
 	stage.onFrame(function(options){
-		stage.clear();
-		battle.update(options);
-		stage.draw();
+	    battle.update(options);
+		back.update(options);
+        stage.draw();
 	})	
 
 	stage.start()

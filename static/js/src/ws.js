@@ -9,12 +9,11 @@ connection.onopen = function () {
 connection.onerror = function (error) {
   console.log('WebSocket Error ', error);
 };
-
 // Log messages from the server
 connection.onmessage = function (e) {
   
   eval('var evaled = ' + e.data);
-  console.log('Server: ', evaled);
+  //console.log('Server: ', evaled);
   dispatch(evaled)
 };
 
