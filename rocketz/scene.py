@@ -1,3 +1,4 @@
+from math import sin, cos
 from weakref import WeakSet
 
 from .event import Eventable
@@ -95,23 +96,28 @@ class GameObject(Eventable):
 
 
     def update(self, delta):
+        # maximum angular and linear velocity
+        # using backforces
+        self.body.ApplyForceToCenter(-0.2 * self.body.linearVelocity)
+        self.body.ApplyTorque(-0.5 * self.body.angularVelocity)
+
+        # antigravity
+        self.body.ApplyForceToCenter(box2d.vec2(0, 1))
+
         if not self.keys: return
         
-        force = box2d.vec2()
-        if self.keys & self.KEY_W:
-            force.y = 1
-        elif self.keys & self.KEY_S:
-            force.y = -1
         if self.keys & self.KEY_A:
-            force.x = -1
+            self.body.ApplyTorque(-1.5)
         elif self.keys & self.KEY_D:
-            force.x = 1
+            self.body.ApplyTorque(1.5)
 
-        force /= float(force.length)
-        force *= 15
-        self.body.ApplyForce(force, self.body.position)
         
-
+        if self.keys & self.KEY_W:
+            force = box2d.vec2()
+            force.x = cos(self.body.angle)
+            force.y = -sin(self.body.angle)
+            force *= 5
+            self.body.ApplyForceToCenter(force)
 
 
 scene = Scene()
