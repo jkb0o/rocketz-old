@@ -25,16 +25,27 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
         }
 	},
 	obj_created: function(data){
+<<<<<<< HEAD
 		var object	= new Kinetic.Rect({
 			x: 500,
 			y: 300,
 			width: 50,
 			height: 50,
+=======
+		var object	= new Kinetic.Polygon({
+			x: 0,
+			y: 0,
+            points: [ 
+                -25,25,
+                40, 0,
+                -25, -25
+            ],
+>>>>>>> 8a0435956109a21d8e1c6ba9d5af07313c0cf735
 			fill: 'black',
 			name: data.id,
             self: true
 		});
-        object.setOffset(25, 25)
+        //object.setOffset(25, 25)
 		
 		object.move	= function(data){
 			var pos	= data.pos;
