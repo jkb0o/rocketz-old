@@ -1,7 +1,6 @@
 Rocketz.background.main	= Kinetic.Layer.extend({
 	init: function(cfg){
 		this._super(cfg);
-
         var back    = new Kinetic.Rect({
             width: 1000,
             height: 600,
@@ -15,14 +14,14 @@ Rocketz.background.main	= Kinetic.Layer.extend({
     createGrid: function(w, h){
 
         var grid        = new Kinetic.Group();
-        var count       = Math.ceil(w / 250) * Math.ceil(h / 250);
+        var count       = Math.ceil(w / 100) * Math.ceil(h / 100);
         
         for (var i = 0; i < count; i++){
             var r       = new Kinetic.Rect({
-                width: 250,
-                height: 250,
-                x: (i % 4) * 250,
-                y: Math.floor(i / 4) * 250,
+                width: 100,
+                height: 100,
+                x: (i % 10) * 100,
+                y: Math.floor(i / 10) * 100,
                 stroke: 'red'
             });
 
@@ -51,11 +50,10 @@ Rocketz.background.main	= Kinetic.Layer.extend({
         
         var x       = sx - 500;
         var y       = sy - 300;
+        this.setOffset([x, y])
+        //this.setX(x);
+        //this.setY(y);
 
-        this.setX(x);
-        this.setY(y);
-
-        console.log(x, y)
         
     }
 })

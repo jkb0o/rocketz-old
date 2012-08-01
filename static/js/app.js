@@ -8,8 +8,8 @@ $(function(){
 		height		: 600
 	});
 
-	var back	= new Rocketz.background.main({name: 'background'});
-	var battle	= new Rocketz.battle.main({name: 'battle'});
+	back	= new Rocketz.background.main({name: 'background'});
+	battle	= new Rocketz.battle.main({name: 'battle'});
 
 	stage.add(back);
 	stage.add(battle);
@@ -18,7 +18,7 @@ $(function(){
 	    battle.update(options);
 		back.update(options);
         stage.draw();
-	})	
+	});	
 
 	stage.start()
 	
