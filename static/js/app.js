@@ -4,8 +4,8 @@ $(function(){
 
 	stage	= new Kinetic.Stage({
 		container	: 'workspace',
-		width		: 1000,
-		height		: 600
+		width		: Rocketz.config.viewport.width,
+		height		: Rocketz.config.viewport.height
 	});
 
 	back	= new Rocketz.background.main({name: 'background'});
@@ -16,7 +16,7 @@ $(function(){
 
 	stage.onFrame(function(options){
 	    battle.update(options);
-		back.update(options);
+        Rocketz.viewport.update();
         stage.draw();
 	});	
 

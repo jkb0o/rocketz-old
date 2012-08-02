@@ -2,8 +2,8 @@ Rocketz.background.main	= Kinetic.Layer.extend({
 	init: function(cfg){
 		this._super(cfg);
         var back    = new Kinetic.Rect({
-            width: 1000,
-            height: 600,
+            width: Rocketz.config.world.width,
+            height: Rocketz.config.world.height,
             fill: 'silver'
         });
         this.add(back);
@@ -31,6 +31,7 @@ Rocketz.background.main	= Kinetic.Layer.extend({
         return grid;
     },
     update: function(options){
+        return;
         var battle  = stage.get('.battle')[0];
 
         if (!battle)    return;
@@ -50,7 +51,7 @@ Rocketz.background.main	= Kinetic.Layer.extend({
         
         var x       = sx - 500;
         var y       = sy - 300;
-        this.setOffset([x, y])
+        //this.setOffset([x, y])
         //this.setX(x);
         //this.setY(y);
 
