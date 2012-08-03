@@ -1,6 +1,7 @@
 Rocketz.config                  = {};
 
 Rocketz.config.ws               = {};
+Rocketz.config.ws.socket        = '';
 
 Rocketz.config.world            = {};
 Rocketz.config.world.width      = 1000;

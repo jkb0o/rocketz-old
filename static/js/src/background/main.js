@@ -20,8 +20,8 @@ Rocketz.background.main	= Kinetic.Layer.extend({
             var r       = new Kinetic.Rect({
                 width: 100,
                 height: 100,
-                x: (i % 10) * 100,
-                y: Math.floor(i / 10) * 100,
+                x: (i % (w / 100)) * 100,
+                y: Math.floor(i / (w / 100)) * 100,
                 stroke: 'red'
             });
 
