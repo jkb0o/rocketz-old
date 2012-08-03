@@ -18,7 +18,7 @@ Rocketz.viewport    = new Object({
         if (!self)  return;
         
         var x       = child.worldx - this.width / 2;
-        var y       = child.worldy - this.height / 2;
+        var y       = child.worldy;
         
         if (x < 0){
             battle.setX(x)
