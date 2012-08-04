@@ -50,6 +50,8 @@ class Dispatcher(WebSocket):
         message = json.loads(str(message))
         if message['message'] == 'changeKeys':
             self.obj.keys = message['data']
+            if self.obj.keys & self.obj.KEY_S:
+                self.obj.shoot_required = True
         #self.send(message, binary=True)
 
     def send(self, message, binary=False):

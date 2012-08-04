@@ -15,13 +15,56 @@ class Spaceship(GameObject):
     ANTIGRAVITY = 0.0, 0.8
     
     fixture_property = dict(shape=[
-        (0.8, 0), 
-        (-0.6, 0.6),
-        (-0.6, -0.6)
+        (0.6, 0),
+        (0.2, -0.3),
+        (-0.6, -0.5),
+        (-0.6, 0.5),
+        (0.2, 0.3),
     ], density=0.3, friction=0.9)
+
+    """
+    If shoot key was pressed
+    """
+    shoot_required = False
+
+    """
+    Ho fast next shot can hapens
+    """
+    shoot_wait = 0.0
+
 
 
     def update(self, delta):
+        
+        self.process_movement(delta)
+        self.process_shooting(delta)
+
+    def process_shooting(self, delta):
+        if self.shoot_wait > 0:
+            self.shoot_wait = max(0.0, self.shoot_wait - delta)
+            return
+
+        if not self.shoot_required:
+            return
+
+        if not self.keys & self.KEY_S:
+            self.shoot_required = False
+
+        self.shoot_wait = 0.1
+
+        bullet_pos = self.body.GetWorldPoint(box2d.vec2(0.7,0))
+        bullet_vel = box2d.vec2()
+        bullet_vel.x = cos(self.body.angle)
+        bullet_vel.y = sin(self.body.angle)
+        bullet_vel *= 15.0
+
+        bullet = scene.create_object('rocketz.game.Bullet', bullet_pos)
+        bullet.body.linearVelocity = bullet_vel
+
+        
+        
+
+    def process_movement(self, delta):
         # maximum angular and linear velocity
         # using backforces
         self.body.ApplyForceToCenter(self.BACK_FORCE * self.body.linearVelocity)
@@ -90,7 +133,15 @@ class Wall(GameObject):
 
         return [(minx, miny), (maxx, maxy)], result
 
+class Bullet(GameObject):
+   
+    fixture_property = dict(
+        box = (0.1, 0.1),
+        density=0.3,
+        friction=0.9
+    )
 
-
-            
+    def __init__(self, *args, **kwargs):
+        super(Bullet, self).__init__(*args, **kwargs)
+        self.body.bullet = True
 

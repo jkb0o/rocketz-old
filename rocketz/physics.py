@@ -23,7 +23,11 @@ def start_simulation():
         (4, 4),
         (12, 4),
         (12, 8),
-    ])
+        (14, 10),
+        (16, 10),
+        (16, 5),
+        (14.5, 5)
+    ], width=0.3)
     return gevent.spawn(simulate)
     
 

@@ -147,7 +147,7 @@ class GameObject(Eventable):
             static=self.is_static,
             shape=b.fixtures[0].shape.vertices,
             center=b.position.tuple,
-            angle=b.angle
+            angle=-1*b.angle
         )
 
 scene = Scene()
