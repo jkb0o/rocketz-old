@@ -12,20 +12,23 @@ Rocketz.viewport    = new Object({
 
         for (var i = 0; i < battle.children.length; i++){
             var child   = battle.children[i];
-            if (child.self) self = child;
+            if (child.self) {
+                self = child;
+            }
         }
 
         if (!self)  return;
-        
-        var x       = child.worldx - this.width / 2;
-        var y       = child.worldy;
+
+        var x = child.worldx - this.width / 2;
+        var y = child.worldy;
         
         if (x < 0){
+            conso
             battle.setX(x);
             x = 0;
         }
         if (y < 0){
-            battle.setY(y);  
+            battle.setY(y);
             y = 0;
         }
         if (x > ww - this.width) {

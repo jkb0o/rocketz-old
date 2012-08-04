@@ -31,7 +31,7 @@ $(function(){
 
             var new_point = [];
             new_point[0] = data[0] * Rocketz.config.viewport.x_scale;
-            new_point[1] = data[1] * Rocketz.config.viewport.y_scale;
+            new_point[1] = Rocketz.config.world.height - data[1] * Rocketz.config.viewport.y_scale;
             return new_point;
         },
         shape: function(data){
