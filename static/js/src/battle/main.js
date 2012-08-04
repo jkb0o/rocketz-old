@@ -1,11 +1,11 @@
 Rocketz.battle.main	= Kinetic.Layer.extend({
-	done_count: 0,
     init: function(cfg){
 		this._super(cfg);
 	},
 	update: function(options){
+        return;
 		for (var i = 0; i < this.children.length; i++){
-            
+
             var child   = this.children[i];
 
             if (!child.userData)    continue;
@@ -15,15 +15,11 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
             var vx      = child.userData.vel[0] * 50;
             var vy      = child.userData.vel[1] * 50;
             var vr      = child.userData.vel[2];
-//
             var diff    = options.timeDiff;
-//
             var x       = child.worldx + vx * diff * 0.001;
             var y       = child.worldy - vy * diff * 0.001;
-//
             var r       = child.getRotation() + vr * diff * 0.001;
 
-//            console.log('HERRREE!!!');
             child.setX(x);
             child.setY(y);
             child.setRotation(r);
@@ -31,13 +27,9 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
         }
 	},
 	obj_created: function(data){
-        if (this.done_count > 0){
-            return
-        }
-        this.done_count++;
 
-        var points = utils.shape(data.shape),
-            center = utils.point(data.center);
+        var center = utils.worldPoint(data.center),
+            points = utils.shape(data.shape);
 
         var object = new Kinetic.Polygon({
             points: points,
@@ -48,7 +40,6 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
             y: center[1]
 		});
 
-        console.log('center');
 
         object.userData = {
             pos: data.center.concat(data.angle),
@@ -62,11 +53,12 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
         console.log(center);
 
 		object.move	= function(data){
-//			var pos	= utils.point(data.pos);
-//            this.worldx = pos[0];
-//            this.worldy = pos[1];
-//            this.setRotation(pos[2]);
-//            this.userData   = data;
+			var pos	= utils.worldPoint(data.pos);
+            this.setX(pos[0]);
+            this.setY(pos[1]);
+            console.log
+            this.setRotation(pos[2]);
+            this.userData   = data;
 		};
         object.identify = function(data){
             data.self = true;

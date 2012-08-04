@@ -23,7 +23,6 @@ Rocketz.viewport    = new Object({
         var y = child.worldy;
         
         if (x < 0){
-            conso
             battle.setX(x);
             x = 0;
         }

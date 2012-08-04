@@ -23,21 +23,27 @@ $(function(){
 	stage.start();
 
     utils = {
-        point: function(data){
+        worldPoint: function(data){
             // TODO: remove it to reduce load. New var is for debugging purpose;
             // data[0] *= Rocketz.config.viewport.x_scale;
             // data[1] *= Rocketz.config.viewport.y_scale;
             // return data
 
+            var new_point = utils.localPoint(data);
+            new_point[1] = Rocketz.config.world.height + new_point[1];
+            return new_point;
+        },
+        localPoint: function(data){
             var new_point = [];
             new_point[0] = data[0] * Rocketz.config.viewport.x_scale;
-            new_point[1] = Rocketz.config.world.height - data[1] * Rocketz.config.viewport.y_scale;
+            new_point[1] = -data[1] * Rocketz.config.viewport.y_scale;
             return new_point;
         },
         shape: function(data){
             var shape = [];
+
             for (var i=0, l=data.length; i<l; i++){
-                var point = utils.point(data[i]);
+                var point = utils.localPoint(data[i]);
                 shape = shape.concat(point);
             }
             return shape;
