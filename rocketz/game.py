@@ -15,10 +15,12 @@ class Spaceship(GameObject):
     ANTIGRAVITY = 0.0, 0.8
     
     fixture_property = dict(shape=[
-        (0.6, 0),
+        (0.5, 0),
         (0.2, -0.3),
-        (-0.6, -0.5),
-        (-0.6, 0.5),
+        (-0.5, -0.5),
+        (-0.6, -0.4),
+        (-0.6, 0.4),
+        (-0.5, 0.5),
         (0.2, 0.3),
     ], density=0.3, friction=0.9)
 
