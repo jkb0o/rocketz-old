@@ -27,31 +27,30 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
         }
 	},
 	obj_created: function(data){
-		var object	= new Kinetic.Polygon({
+
+        var points = utils.shape(data.shape),
+            object	= new Kinetic.Polygon({
 			x: Rocketz.config.viewport.width / 2,
 			y: Rocketz.config.viewport.height / 2,
-            points: [ 
-                -25,25,
-                40, 0,
-                -25, -25
-            ],
+            points: points,
 			fill: 'black',
-			name: data.id
+			name: data.id,
+            rotation: data.angle
 		});
-        object.self = true;
-		
+
 		object.move	= function(data){
-            
-			var pos	= data.pos;
-			
-			//this.setX(pos[0] * 50);
-			//this.setY(stage.getHeight() - pos[1] * 50);
-            this.worldx = pos[0] * 50;
-            this.worldy = stage.getHeight() - pos[1] * 50;
+			var pos	= utils.point(data.pos);
+
+            console.log(pos);
+            this.worldx = pos[0];
+            this.worldy = stage.getHeight() - pos[1];
             this.setRotation(pos[2]);
 
             this.userData   = data;
-		}
+		};
 		this.add(object);
-	}
-})
+	},
+    identify: function (data){
+        data.self = true;
+    }
+});

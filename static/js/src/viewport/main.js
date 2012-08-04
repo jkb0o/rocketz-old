@@ -13,7 +13,7 @@ Rocketz.viewport    = new Object({
         for (var i = 0; i < battle.children.length; i++){
             var child   = battle.children[i];
             if (child.self) self = child;
-        };
+        }
 
         if (!self)  return;
         
@@ -21,13 +21,13 @@ Rocketz.viewport    = new Object({
         var y       = child.worldy;
         
         if (x < 0){
-            battle.setX(x)
+            battle.setX(x);
             x = 0;
-        };
+        }
         if (y < 0){
             battle.setY(y);  
             y = 0;
-        };
+        }
         if (x > ww - this.width) {
             battle.setX(x - ww + this.width);
             x = ww - this.width;
@@ -35,7 +35,7 @@ Rocketz.viewport    = new Object({
         if (y > wh - this.height) {
             battle.setY(y - wh + this.height);
             y = wh - this.height;
-        };
+        }
 
         back.setOffset([x, y]);
 
