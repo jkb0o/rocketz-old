@@ -33,3 +33,5 @@ tmp
 .env
 rocketz/settings/local.py
 web/game/settings_local.py
+
+.idea
