@@ -14,7 +14,7 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
 
             var vx      = child.userData.vel[0] * 50;
             var vy      = child.userData.vel[1] * 50;
-            var vr      = child.userData.vel[2];
+            var vr      = child.userData.avel;
             var diff    = options.timeDiff;
             var x       = child.worldx + vx * diff * 0.001;
             var y       = child.worldy - vy * diff * 0.001;
@@ -56,8 +56,7 @@ Rocketz.battle.main	= Kinetic.Layer.extend({
 			var pos	= utils.worldPoint(data.pos);
             this.setX(pos[0]);
             this.setY(pos[1]);
-            console.log
-            this.setRotation(pos[2]);
+            this.setRotation(data.rot);
             this.userData   = data;
 		};
         object.identify = function(data){
