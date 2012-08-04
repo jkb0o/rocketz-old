@@ -59,13 +59,14 @@ class NetworkRenderer(object):
             pos=[
                 body.position[0], 
                 body.position[1],
-                body.angle
+                
             ],
             vel=[
                 body.linearVelocity[0], 
                 body.linearVelocity[1],
-                body.angularVelocity
-            ]
+            ],
+            rot=body.angle,
+            avel=body.angularVelocity
         )
         for client in clients:
             client.send(msg)
