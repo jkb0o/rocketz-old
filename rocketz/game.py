@@ -8,8 +8,8 @@ class Spaceship(GameObject):
     A spaceship controlled by user
     """
 
-    BACK_FORCE = -0.4
-    BACK_TORQUE = -0.3
+    BACK_FORCE = -0.5
+    BACK_TORQUE = -0.2
     FORCE_VALUE = 4.0
     TORQUE_VALUE = 1.0
     ANTIGRAVITY = 0.0, 0.8
@@ -18,7 +18,7 @@ class Spaceship(GameObject):
         (0.8, 0), 
         (-0.6, 0.6),
         (-0.6, -0.6)
-    ], density=0.2, friction=0.9)
+    ], density=0.3, friction=0.9)
 
 
     def update(self, delta):
@@ -33,9 +33,9 @@ class Spaceship(GameObject):
         if not self.keys: return
         
         if self.keys & self.KEY_A:
-            self.body.ApplyTorque(-1 * self.TORQUE_VALUE)
+            self.body.ApplyTorque(self.TORQUE_VALUE)
         elif self.keys & self.KEY_D:
-            self.body.ApplyTorque( self.TORQUE_VALUE)
+            self.body.ApplyTorque(-1 * self.TORQUE_VALUE)
 
         
         if self.keys & self.KEY_W:
