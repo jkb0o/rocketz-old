@@ -9,9 +9,9 @@ class Spaceship(GameObject):
     """
 
     BACK_FORCE = -0.5
-    BACK_TORQUE = -0.2
+    BACK_TORQUE = -0.3
     FORCE_VALUE = 4.0
-    TORQUE_VALUE = 1.0
+    TORQUE_VALUE = 1.5
     ANTIGRAVITY = 0.0, 0.8
     
     fixture_property = dict(shape=[
@@ -41,7 +41,7 @@ class Spaceship(GameObject):
         if self.keys & self.KEY_W:
             force = box2d.vec2()
             force.x = cos(self.body.angle)
-            force.y = -sin(self.body.angle)
+            force.y = sin(self.body.angle)
             force *= self.FORCE_VALUE
             self.body.ApplyForceToCenter(force)
 

@@ -17,6 +17,13 @@ def start_simulation():
         (20,12),
         (0,12)
     ], width=1.0, closed=True)
+
+    Wall.chain([
+        (4, 8),
+        (4, 4),
+        (12, 4),
+        (12, 8),
+    ])
     return gevent.spawn(simulate)
     
 

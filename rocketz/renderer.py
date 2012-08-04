@@ -66,7 +66,7 @@ class NetworkRenderer(object):
                 body.linearVelocity[1],
             ],
             rot= -1 * body.angle,
-            avel=body.angularVelocity
+            avel= -1 * body.angularVelocity
         )
         for client in clients:
             client.send(msg)
