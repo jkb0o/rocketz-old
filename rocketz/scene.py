@@ -103,7 +103,7 @@ class GameObject(Eventable):
     KEY_D = 0b1000
 
     _last_id = 1
-    def __init__(self):
+    def __init__(self, pos=(0,0)):
         super(GameObject, self).__init__()
         # init body
         if self.create_body:
@@ -119,6 +119,8 @@ class GameObject(Eventable):
                     kwargs['shape'] = box2d.polygonShape(vertices=kwargs['shape'])
                     
                 self.body.CreatePolygonFixture(**kwargs)
+
+            self.body.position = pos
 
         # generate unique id
         self.id = GameObject._last_id

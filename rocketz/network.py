@@ -29,7 +29,7 @@ class Dispatcher(WebSocket):
 
         import random
         position = 10, 6
-        obj = scene.create_object('rocketz.game.Spaceship')
+        obj = scene.create_object('rocketz.game.Spaceship', pos = position)
         obj.body.position = position
         obj.body.angle = 3.14 * random.random()
         obj.body.linearVelocity = [
