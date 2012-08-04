@@ -51,10 +51,9 @@ class Wall(GameObject):
 
     def __init__(self, pos, size):
         self.fixture_property = dict(
-            position=pos,
             shapes=(box2d.polygonShape(box=size))
         )
-        super(Wall, self).__init__()
+        super(Wall, self).__init__(pos)
 
     @classmethod
     def chain(cls, vertices, width=1, closed=False):
