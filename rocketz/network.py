@@ -4,11 +4,13 @@ import gevent
 from ws4py.server.geventserver import WebSocketServer
 from ws4py.websocket import WebSocket
 
+clients = []
+
 from .conf import settings
+from .messaging import notification
 from .physics import world
 from .scene import scene
 
-clients = []
 
 def run_server():
     host, port = settings.LISTEN.split(':')
@@ -25,14 +27,9 @@ class Dispatcher(WebSocket):
     def opened(self):
         clients.append(self)
 
-        self.scene_listeners = [
-            scene.add_listener('object_added', self.notify_creation),
-            scene.add_listener('object_removed', self.notify_remove),
-        ]
-
         import random
         position = 10, 6
-        obj = scene.create_object('rocketz.scene.GameObject')
+        obj = scene.create_object('rocketz.game.Spaceship')
         obj.body.position = position
         obj.body.angle = 3.14 * random.random()
         obj.body.linearVelocity = [
@@ -40,30 +37,28 @@ class Dispatcher(WebSocket):
             20 - 40 * random.random(),
         ]
         self.obj = obj
+        obj.session = self
+
+        # tell client which object is himself
+        self.send(notification("identify", obj=obj.id))
+
+        # tell client all about world itself
+        scene.explain(self.obj)
 
     def closed(self, code, reason="Not defined"):
         print "Client %s closed connection (%d, reason: %s)" % (self, code, reason)
-        for listener in self.scene_listeners:
-            scene.clear_listener(listener)
         clients.remove(self)
         if self.obj:
             self.obj.remove()
             del self.obj
 
-    def send(self, msg, **kwargs):
-        data = json.dumps(dict(message=msg, data=kwargs))
-        super(Dispatcher, self).send(data)
-        
-    
     def received_message(self, message):
-        print "C> %s" % message
+        print "[%d] C> %s" % (id(self), message)
         message = json.loads(str(message))
         if message['message'] == 'changeKeys':
             self.obj.keys = message['data']
         #self.send(message, binary=True)
 
-    def notify_creation(self, obj):
-        self.send("obj_created", id=obj.id)
-
-    def notify_remove(self, obj):
-        self.send("obj_removed", id=obj.id)
+    def send(self, message, binary=False):
+        print "[%d] S> %s" % (id(self), message)
+        return super(Dispatcher, self).send(message, binary)

@@ -4,29 +4,19 @@ import gevent
 import Box2D
 from Box2D import b2 as box2d
 
-
 world = box2d.world()
-world.CreateStaticBody(
-    position=(10, -1),
-    shapes=(box2d.polygonShape(box=(10,1)))
-)
-world.CreateStaticBody(
-    position=(10, 13),
-    shapes=(box2d.polygonShape(box=(10,1)))
-)
-world.CreateStaticBody(
-    position=(21, 6),
-    shapes=(box2d.polygonShape(box=(1,6)))
-)
-world.CreateStaticBody(
-    position=(-1, 6),
-    shapes=(box2d.polygonShape(box=(1,6)))
-)
 
 from .conf import settings
 from .scene import scene
+from .game import Wall
 
 def start_simulation():
+    world.bounds, walls = Wall.chain([
+        (0, 0),
+        (20,0),
+        (20,12),
+        (0,12)
+    ], width=1.0, closed=True)
     return gevent.spawn(simulate)
     
 

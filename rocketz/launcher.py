@@ -50,6 +50,7 @@ class Launcher(object):
             if job is not None:
                 jobs.append(job)
         gevent.joinall(jobs)
+        raise RuntimeError("You should never be here")
         
     def setup_logging(self):
         logging.basicConfig(

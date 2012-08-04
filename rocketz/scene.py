@@ -1,7 +1,6 @@
-from math import sin, cos
-from weakref import WeakSet
-
 from .event import Eventable
+from .network import clients
+from .messaging import notification
 from .physics import world, box2d
 from .utils import import_object
 
@@ -12,7 +11,7 @@ class Scene(Eventable):
         self.objects = {}
         self.classes = {}
 
-    def create_object(self, cls):
+    def create_object(self, cls, *args, **kwargs):
         """
         Factory method.
         Usage:
@@ -21,7 +20,7 @@ class Scene(Eventable):
         if cls not in self.classes:
             self.classes[cls] = import_object(cls)
 
-        obj = self.classes[cls]()
+        obj = self.classes[cls](*args, **kwargs)
         self.add_object(obj)
 
         return obj
@@ -35,16 +34,38 @@ class Scene(Eventable):
         if not isinstance(obj, GameObject):
             raise TypeError("Unable to add %s to scene" % obj)
 
+        # tell anyone object created
+        msg = notification("obj_created", **obj.explain)
+        for client in clients:
+            client.send(msg)
+
         self.objects[obj.id] = obj
-        self.fire_event("object_added", obj=obj)
+
+    def explain(self, obj, full=False):
+        """
+        Tells to the object everything about scene
+        If full = True explain object itself too
+        """
+        session = obj.session
+        lower, upper = world.bounds
+        session.send(notification("world_info", 
+            lower_bound = lower,
+            upper_bound = upper
+        ))
+
+        for go in self:
+            if not full and go==obj: continue
+
+            msg = notification("obj_created", **go.explain)
+            session.send(msg)
 
     def remove_object(self, obj):
-        obj.fire_event("before_remove")
         del self.objects[obj.id]
         world.DestroyBody(obj.body)
         obj.body = None
-        self.fire_event("object_removed", obj=obj)
-        obj.fire_event("after_remove")
+
+        # tell anyone obj removed
+        msg = notification("remove_object", obj=obj.id)
 
     def __iter__(self):
         for obj in self.objects.values():
@@ -57,6 +78,11 @@ class GameObject(Eventable):
     GameObject still have id and can be explaned
     """
     create_body = True
+
+    """
+    Should it be dynamic or static
+    """
+    is_static = False
 
     """
     This attributes will be passed to body.CreatePolygonFixture
@@ -81,8 +107,18 @@ class GameObject(Eventable):
         super(GameObject, self).__init__()
         # init body
         if self.create_body:
-            self.body = world.CreateDynamicBody(userData=self)
-            self.body.CreatePolygonFixture(**self.fixture_property)
+            if self.is_static:
+                self.body = world.CreateStaticBody(**self.fixture_property)
+            else:
+                self.body = world.CreateDynamicBody(userData=self)
+                kwargs = self.fixture_property.copy()
+                if 'box' in kwargs:
+                    kwargs['shape'] = box2d.polygonShape(box=kwargs['box'])
+                    del kwargs['box']
+                elif 'shape' in kwargs:
+                    kwargs['shape'] = box2d.polygonShape(vertices=kwargs['shape'])
+                    
+                self.body.CreatePolygonFixture(**kwargs)
 
         # generate unique id
         self.id = GameObject._last_id
@@ -96,28 +132,20 @@ class GameObject(Eventable):
 
 
     def update(self, delta):
-        # maximum angular and linear velocity
-        # using backforces
-        self.body.ApplyForceToCenter(-0.2 * self.body.linearVelocity)
-        self.body.ApplyTorque(-0.5 * self.body.angularVelocity)
+        pass
 
-        # antigravity
-        self.body.ApplyForceToCenter(box2d.vec2(0, 1))
-
-        if not self.keys: return
-        
-        if self.keys & self.KEY_A:
-            self.body.ApplyTorque(-1.5)
-        elif self.keys & self.KEY_D:
-            self.body.ApplyTorque(1.5)
-
-        
-        if self.keys & self.KEY_W:
-            force = box2d.vec2()
-            force.x = cos(self.body.angle)
-            force.y = -sin(self.body.angle)
-            force *= 5
-            self.body.ApplyForceToCenter(force)
-
+    @property
+    def explain(self):
+        """
+        Helper for explaining physics properties"
+        """
+        b = self.body
+        return dict(
+            id=self.id,
+            static=self.is_static,
+            shape=b.fixtures[0].shape.vertices,
+            center=b.position.tuple,
+            angle=b.angle
+        )
 
 scene = Scene()

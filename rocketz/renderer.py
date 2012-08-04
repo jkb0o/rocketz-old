@@ -2,8 +2,10 @@ import time
 
 import gevent
 
-from .network import clients
 from .conf import settings
+from .messaging import notification
+from .network import clients
+from .physics import box2d
 from .scene import scene
 
 def network():
@@ -36,12 +38,12 @@ class NetworkRenderer(object):
     def __init__(self, obj):
         self.obj = obj
         # remember last velocity to detect do we need to send syncs
-        self.linear_velocity = 0, 0
+        self.linear_velocity = box2d.vec2()
         self.angular_velocity = 0
 
     def render(self):
         body = self.obj.body
-        if self.linear_velocity == body.linearVelocity:
+        if (self.linear_velocity - body.linearVelocity).lengthSquared < 0.001:
             return
         
         self.linear_velocity = body.linearVelocity.copy()
@@ -50,19 +52,20 @@ class NetworkRenderer(object):
             body.position[0],
             body.position[1]
         )
-
+        
+        msg = notification(
+            "move", 
+            obj=self.obj.id,
+            pos=[
+                body.position[0], 
+                body.position[1],
+                body.angle
+            ],
+            vel=[
+                body.linearVelocity[0], 
+                body.linearVelocity[1],
+                body.angularVelocity
+            ]
+        )
         for client in clients:
-            client.send(
-                "move", 
-                obj=self.obj.id,
-                pos=[
-                    body.position[0], 
-                    body.position[1],
-                    body.angle
-                ],
-                vel=[
-                    body.linearVelocity[0], 
-                    body.linearVelocity[1],
-                    body.angularVelocity
-                ]
-            )
+            client.send(msg)
