@@ -1,80 +1,61 @@
+// initialize application
 $(function(){
-    
-    mask    = 0;
+    var app = Rocketz;
+    app.input.mask    = 0;
 
-	stage	= new Kinetic.Stage({
-		container	: 'workspace',
-		width		: Rocketz.config.viewport.width,
-		height		: Rocketz.config.viewport.height
+    if ($.isFunction(Rocketz.stage)){
+        app.stage = app.stage();
+    }
+
+    for (var layerName in app.layers){
+        var layer = app.layers[layerName];
+        if (!layer){
+            continue;
+        }
+        app.stage.add(layer);
+    }
+
+	app.stage.onFrame(function(options){
+        for (var layerName in app.layers){
+            var layer = app.layers[layerName];
+            if (!layer){
+                continue;
+            }
+            layer.update(options)
+        }
+        app.stage.draw();
 	});
 
-	back	= new Rocketz.background.main({name: 'background'});
-	battle	= new Rocketz.battle.main({name: 'battle'});
+    app.stage.start();
 
-	stage.add(back);
-	stage.add(battle);
 
-	stage.onFrame(function(options){
-	    battle.update(options);
-        Rocketz.viewport.update();
-        stage.draw();
-	});	
-
-	stage.start();
-
-    utils = {
-        worldPoint: function(data){
-            // TODO: remove it to reduce load. New var is for debugging purpose;
-            // data[0] *= Rocketz.config.viewport.x_scale;
-            // data[1] *= Rocketz.config.viewport.y_scale;
-            // return data
-
-            var new_point = utils.localPoint(data);
-            new_point[1] = Rocketz.config.world.height + new_point[1];
-            return new_point;
-        },
-        localPoint: function(data){
-            var new_point = [];
-            new_point[0] = data[0] * Rocketz.config.viewport.x_scale;
-            new_point[1] = -data[1] * Rocketz.config.viewport.y_scale;
-            return new_point;
-        },
-        shape: function(data){
-            var shape = [];
-
-            for (var i=0, l=data.length; i<l; i++){
-                var point = utils.localPoint(data[i]);
-                shape = shape.concat(point);
-            }
-            return shape;
-        }
-    };
 
     var processInput = function(e){
         var code	= e.keyCode;
         var codes	= [87,65,83,68];
 
-        var oldMask = mask;
+        var oldMask = app.input.mask,
+            newMask = app.input.mask;
 
         for (var i = 0; i < codes.length; i++){
-            var item = codes[i];
-
-            if (code != item)
-                continue;
-
-            mask = mask | Math.pow(2, i);
+            var allowed_code = codes[i];
+            if (code == allowed_code){
+                if (e.type == 'keydown'){
+                    newMask = newMask | Math.pow(2, i);
+                } else {
+                    newMask -= Math.pow(2, i);
+                }
+                break;
+            }
         }
 
-        if (mask == oldMask){
+        if (newMask == oldMask){
             return;
         }
-
-        connection.send(JSON.stringify({message: 'changeKeys', data: mask}));
+        app.input.mask = newMask;
+        app.connection.send(JSON.stringify({message: 'changeKeys', data: app.input.mask}));
     };
 
 	document.body.addEventListener('keydown', processInput);
 	document.body.addEventListener('keyup', processInput);
-
-    initSocket();
-
 });
