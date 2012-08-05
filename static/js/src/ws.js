@@ -19,24 +19,36 @@
 
     // TODO: Move to app
     function dispatch (data){
+        /*
+         * data = {
+         *     'type': 'Notification' // or 'Request' or 'Response'
+         *     'body': message_body
+         * }
+         * 
+         * notification_body = {
+         *     'content_type': 'obj_created', // or other server notification
+         *     'content': notification_content
+         * }
+         */
+
         var target	= null;
 
         var battle = app.stage.get('.battle')[0];
 
-        if (data.message == "obj_created") {
+        if (data.body.content_type == "obj_created") {
             target = battle;
         }
-        if (data.message == "move") {
-            target = battle.get('.'+data.data.obj)[0]
+        if (data.body.content_type == "move") {
+            target = battle.get('.'+data.body.content.obj)[0]
         }
-        if (data.message == "identify") {
-            target = battle.get('.'+data.data.obj)[0]
+        if (data.body.content_type == "identify") {
+            target = battle.get('.'+data.body.content.obj)[0]
         }
 
         if (!target){
             return;
         }
-        target[data.message](data.data);
+        target[data.body.content_type](data.body.content);
     }
 
 })(Rocketz);

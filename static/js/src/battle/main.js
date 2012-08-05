@@ -47,10 +47,10 @@
                 };
 
             if (data.shape_type == 'poly'){
-                options.points = utils.shape(data.shape);
+                options.points = utils.shape(data.shape_options);
                 object = new Kinetic.Polygon(options);
             } else {
-                options.radius = utils.radius(data.radius);
+                options.radius = utils.radius(data.shape_options);
                 object = new Kinetic.Ellipse(options);
             }
 
