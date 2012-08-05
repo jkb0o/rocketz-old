@@ -2,7 +2,7 @@ from ..conf import settings
 
 protocol = getattr(settings, 'PROTOCOL', 'json')
 
-if protocol == 'json':
+if protocol in ['json', 'js']:
     from .js import *
 elif protocol == 'binary':
     from .binary import *
