@@ -47,11 +47,11 @@
                 };
 
             if (data.shape_type == 'poly'){
-                console.log("Create poly")
+                console.log("Create poly");
                 options.points = utils.shape(data.shape);
                 object = new Kinetic.Polygon(options);
             } else {
-                console.log("Create circle")
+                console.log("Create circle");
                 options.radius = utils.radius(data.radius);
                 object = new Kinetic.Ellipse(options);
             }

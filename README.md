@@ -20,8 +20,10 @@ Old-school game.
 ## Running
 
 Currently in dev mode using django runserver
-    
-    ./web/manage.py runserver
+
+    1. Start game greenlets /rctl rs start --fg
+
+    2. Start django to serve static ./web/manage.py runserver
 
 
 
