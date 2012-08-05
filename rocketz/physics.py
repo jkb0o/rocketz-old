@@ -4,7 +4,7 @@ import gevent
 import Box2D
 from Box2D import b2 as box2d
 
-world = box2d.world()
+world = box2d.world(gravity=(0,-10))
 
 from .conf import settings
 from .scene import scene

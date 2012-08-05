@@ -31,23 +31,32 @@
             }
         },
         obj_created:function (data) {
-            var utils = app.utils,
-                layer = this;
+            var layer = this;
+            var utils = app.utils;
+            var center = utils.worldPoint(data.center);
+            var points = null,
+                radius = 0.0,
+                shapeClass = null,
+                object = null,
+                options = {
+                    fill:'black',
+                    name:data.id,
+                    rotation:data.angle,
+                    x:center[0],
+                    y:center[1]
+                };
 
-            var center = utils.worldPoint(data.center),
-                points = utils.shape(data.shape);
-
-            var object = new Kinetic.Polygon({
-                points:points,
-                fill:'black',
-                name:data.id,
-                rotation:data.angle,
-                x:center[0],
-                y:center[1]
-            });
+            if (data.shape_type == 'poly'){
+                console.log("Create poly")
+                options.points = utils.shape(data.shape);
+                object = new Kinetic.Polygon(options);
+            } else {
+                console.log("Create circle")
+                options.radius = utils.radius(data.radius);
+                object = new Kinetic.Ellipse(options);
+            }
 
             object.isStatic = data.static;
-
             object.userData = {
                 pos: data.center.concat(data.angle),
                 vel: [0, 0, 0],

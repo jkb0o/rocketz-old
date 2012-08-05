@@ -65,7 +65,9 @@ class Scene(Eventable):
         obj.body = None
 
         # tell anyone obj removed
-        msg = notification("remove_object", obj=obj.id)
+        msg = notification("obj_removed", obj=obj.id)
+        for client in clients:
+            client.send(msg)
 
     def __iter__(self):
         for obj in self.objects.values():
@@ -94,6 +96,9 @@ class GameObject(Eventable):
     """
     renderer = None
 
+    linear_damping = 0
+    angular_damping = 0
+
 
     # remove keys from here to child class
     keys = 0
@@ -101,6 +106,9 @@ class GameObject(Eventable):
     KEY_A = 0b0010
     KEY_S = 0b0100
     KEY_D = 0b1000
+    
+    # read only
+    shape_type = 'poly' # or circle
 
     _last_id = 1
     def __init__(self, pos=(0,0)):
@@ -110,13 +118,21 @@ class GameObject(Eventable):
             if self.is_static:
                 self.body = world.CreateStaticBody(**self.fixture_property)
             else:
-                self.body = world.CreateDynamicBody(userData=self)
+                self.body = world.CreateDynamicBody(
+                    userData=self,
+                    linearDamping=self.linear_damping,
+                    angularDamping=self.angular_damping,
+                )
                 kwargs = self.fixture_property.copy()
                 if 'box' in kwargs:
                     kwargs['shape'] = box2d.polygonShape(box=kwargs['box'])
                     del kwargs['box']
                 elif 'shape' in kwargs:
                     kwargs['shape'] = box2d.polygonShape(vertices=kwargs['shape'])
+                elif 'radius' in kwargs:
+                    kwargs['shape'] = box2d.circleShape(radius=kwargs['radius'])
+                    del kwargs['radius']
+                    self.shape_type = 'circle'
                     
                 self.body.CreatePolygonFixture(**kwargs)
 
@@ -142,12 +158,19 @@ class GameObject(Eventable):
         Helper for explaining physics properties"
         """
         b = self.body
-        return dict(
+        res = dict(
             id=self.id,
             static=self.is_static,
-            shape=b.fixtures[0].shape.vertices,
             center=b.position.tuple,
             angle=-1*b.angle
         )
+        if self.shape_type == 'poly':
+            res['shape_type'] = 'poly'
+            res['shape']=b.fixtures[0].shape.vertices
+        else:
+            res['shape_type'] = 'circle'
+            res['radius'] = b.fixtures[0].shape.radius
+
+        return res
 
 scene = Scene()
