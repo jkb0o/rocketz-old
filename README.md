@@ -1,7 +1,8 @@
 rocketz
 =======
 
-Old-school game.
+Old-school game. Here is the [link](http://www.google.ru/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;ved=0CGsQtwIwAQ&amp;url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DSnAIuJsBQKQ&ei=PPweUIH3Bca6hAfBkoDYBQ&amp;usg=AFQjCNGTyF654OWg2rvUizwfZb9F7pmlaA&amp;sig2=NdhrNk5pNOnrZfoaKi1Uiw)
+Sometimes to recall an oldschool stuff it's just easier to remake it.
 
 ## Project structure
 
