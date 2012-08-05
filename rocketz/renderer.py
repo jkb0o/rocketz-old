@@ -20,6 +20,9 @@ def render_network():
     while True:
         # job code
         for game_obj in scene:
+            if game_obj.is_static:
+                continue
+
             if not game_obj.renderer:
                 game_obj.renderer = NetworkRenderer(game_obj)
 
@@ -40,13 +43,22 @@ class NetworkRenderer(object):
         # remember last velocity to detect do we need to send syncs
         self.linear_velocity = box2d.vec2()
         self.angular_velocity = 0
-
+        
     def render(self):
         body = self.obj.body
-        if (self.linear_velocity - body.linearVelocity).lengthSquared < 0.001:
+        if  abs(self.angular_velocity - body.angularVelocity) < 0.001 \
+            and (self.linear_velocity - body.linearVelocity).lengthSquared < 0.002:
             return
         
-        self.linear_velocity = body.linearVelocity.copy()
+        vel = self.linear_velocity = body.linearVelocity.copy()
+        avel = self.angular_velocity = body.angularVelocity
+        print vel.lengthSquared, avel
+        if vel.lengthSquared < 0.0001:
+            vel = box2d.vec2()
+
+        if abs(avel) < 0.0001:
+            avel = 0
+
         message = "Object #%d position: (%0.3f, %0.3f)" % (
             self.obj.id,
             body.position[0],
@@ -56,17 +68,10 @@ class NetworkRenderer(object):
         msg = notification(
             "move", 
             obj=self.obj.id,
-            pos=[
-                body.position[0], 
-                body.position[1],
-                
-            ],
-            vel=[
-                body.linearVelocity[0], 
-                body.linearVelocity[1],
-            ],
+            pos=body.position.tuple,
+            vel=vel.tuple,
             rot= -1 * body.angle,
-            avel= -1 * body.angularVelocity
+            avel= -1 * avel
         )
         for client in clients:
             client.send(msg)

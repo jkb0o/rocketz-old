@@ -16,6 +16,16 @@
             newPoint[1] = -data[1] * app.config.viewport.y_scale;
             return newPoint;
         },
+        radius: function(data){
+            if (data.length){
+                var newRadius = [];
+                newRadius[0] = data[0] * app.config.viewport.x_scale;
+                newRadius[1] = data[1] * app.config.viewport.y_scale;
+                return newRadius;
+            } else {
+                return data * app.config.viewport.x_scale;
+            }
+        },
         velocity: function(data){
             var newVelocity = [];
             newVelocity[0] = data[0] * app.config.viewport.x_scale;

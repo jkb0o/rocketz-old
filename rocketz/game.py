@@ -138,12 +138,22 @@ class Wall(GameObject):
 class Bullet(GameObject):
    
     fixture_property = dict(
-        box = (0.1, 0.1),
-        density=0.3,
-        friction=0.9
+        radius = 0.1,
+        density=0.05,
+        friction=0,
+        restitution=1.0,
     )
 
     def __init__(self, *args, **kwargs):
         super(Bullet, self).__init__(*args, **kwargs)
         self.body.bullet = True
+        self.time_to_life = 4.0
+
+    def update(self, delta):
+        if self.time_to_life < 0:
+            return self.remove()
+
+        # antigravity
+        self.body.ApplyForceToCenter(box2d.vec2(0, 10) * self.body.mass)
+        self.time_to_life -= delta
 
