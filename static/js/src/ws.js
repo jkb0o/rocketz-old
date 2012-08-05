@@ -33,7 +33,7 @@
 
         var target	= null;
 
-        var battle = app.stage.get('.battle')[0];
+        var battle = app.layers['battle'];
 
         if (data.body.content_type == "obj_created") {
             target = battle;

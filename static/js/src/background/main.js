@@ -3,17 +3,16 @@
         init: function(cfg){
             this._super(cfg);
             var back    = new Kinetic.Rect({
-                width: Rocketz.config.world.width,
-                height: Rocketz.config.world.height,
+                width: app.config.world.width,
+                height: app.config.world.height,
                 fill: 'silver'
             });
             this.add(back);
 
-            var grid    = this.createGrid(back.getWidth(), back.getHeight());
+            var grid = this.createGrid(back.getWidth(), back.getHeight());
             this.add(grid);
         },
         createGrid: function(w, h){
-
             var grid        = new Kinetic.Group();
             var count       = Math.ceil(w / 100) * Math.ceil(h / 100);
 
@@ -52,14 +51,8 @@
 
             var x       = sx - 500;
             var y       = sy - 300;
-            //this.setOffset([x, y])
-            //this.setX(x);
-            //this.setY(y);
-
-
         }
     });
-    // TODO: inheritance!
     app.layers.background = new layerClass({name: 'background'});
 })(Rocketz);
 

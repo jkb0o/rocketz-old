@@ -1,12 +1,13 @@
 ;(function (app){
-    var util = app.utils;
+    var config = app.config;
 
     app.viewport = new Object({
         width: Rocketz.config.viewport.width,
         height: Rocketz.config.viewport.height,
         target: null,
         viewPortPosition: null,
-        update: function(){
+        factor: config.viewport.easingStretch,
+        update: function(options){
             var battle = app.layers['battle'],
                 back = app.layers['background'];
 
@@ -14,15 +15,15 @@
                 return;
             }
 
-            var ww      = app.config.world.width;
-            var wh      = app.config.world.height;
             var target  = battle.viewPortTarget;
 
             if (!target){
                 return;
             }
 
-            var x = target.getX() - this.width / 2,
+            var ww = app.config.world.width,
+                wh = app.config.world.height,
+                x = target.getX() - this.width / 2,
                 y = target.getY() - this.height / 2;
 
             x = Math.max(0, x);
@@ -32,21 +33,38 @@
 
             var offset = [x, y];
 
-            this.viewPortPosition = offset;
-//
-//            if (!this.viewPortPosition){
-//                this.viewPortPosition = [x, y];
-//            } else {
-//                var distance = util.distance(offset, this.viewPortPosition);
-//                var velocity = [x - this.viewPortPosition[0], y - this.viewPortPosition[1]];
-//                var factor = 30;
-//                this.viewPortPosition = [
-//                    Math.floor(x + velocity[0] * distance / factor),
-//                    Math.floor(y - velocity[1] * distance / factor)
-//                ];
-//
-//            }
+            if (!this.viewPortPosition | !config.viewport.easingEnabled){
+                this.viewPortPosition = offset;
+            } else if(options.timeDiff > 10) {
+                var timeDiff = options.timeDiff * 0.001,
+                    velocity = [
+                        (x - this.viewPortPosition[0]) / timeDiff / this.factor,
+                        (y - this.viewPortPosition[1]) / timeDiff / this.factor
+                    ],
+                    viewPortOffset = [
+                        velocity[0] * timeDiff,
+                        velocity[1] * timeDiff
+                    ];
 
+                // NOTE: this may probly be shit
+
+                viewPortOffset = [
+                    Math.abs(viewPortOffset[0]) * viewPortOffset[0],
+                    Math.abs(viewPortOffset[1]) * viewPortOffset[1]
+                ];
+
+                var newPos = [
+                    this.viewPortPosition[0] + viewPortOffset[0],
+                    this.viewPortPosition[1] + viewPortOffset[1]
+                ];
+                if (Math.abs(newPos[0]) != Infinity &&
+                    Math.abs(newPos[1]) != Infinity &&
+                    newPos[0] != NaN &&
+                    newPos[1] != NaN)
+                {
+                    this.viewPortPosition = newPos;
+                }
+            }
             battle.setOffset(this.viewPortPosition);
             back.setOffset(this.viewPortPosition);
         }

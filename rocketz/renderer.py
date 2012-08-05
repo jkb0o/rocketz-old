@@ -43,18 +43,19 @@ class NetworkRenderer(object):
         # remember last velocity to detect do we need to send syncs
         self.linear_velocity = box2d.vec2()
         self.angular_velocity = 0
-        
+
     def render(self):
         body = self.obj.body
-        if  abs(self.angular_velocity - body.angularVelocity) < 0.001 \
-            and (self.linear_velocity - body.linearVelocity).lengthSquared < 0.002:
+        angular_diff = abs(self.angular_velocity - body.angularVelocity)
+        linear_diff = (self.linear_velocity - body.linearVelocity).lengthSquared
+        if angular_diff < 0.001 and linear_diff < 0.002:
             return
-        
+
         vel = self.linear_velocity = body.linearVelocity.copy()
         avel = self.angular_velocity = body.angularVelocity
-        print vel.lengthSquared, avel
+
         if vel.lengthSquared < 0.0001:
-            vel = box2d.vec2()
+            vel = box2d.vec2(0, 0)
 
         if abs(avel) < 0.0001:
             avel = 0
@@ -64,7 +65,9 @@ class NetworkRenderer(object):
             body.position[0],
             body.position[1]
         )
-        
+
+        print vel.tuple, avel, vel.lengthSquared
+
         msg = notification(
             "move", 
             obj=self.obj.id,

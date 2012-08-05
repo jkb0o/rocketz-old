@@ -521,7 +521,7 @@ Kinetic.Animation = {
     frame: {
         time: 0,
         timeDiff: 0,
-        lastTime: 0
+        lastTimeStamp: 0
     },
     _addAnimation: function(anim) {
         anim.id = this.animIdCounter++;

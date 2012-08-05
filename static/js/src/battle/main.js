@@ -34,10 +34,7 @@
             var layer = this;
             var utils = app.utils;
             var center = utils.worldPoint(data.center);
-            var points = null,
-                radius = 0.0,
-                shapeClass = null,
-                object = null,
+            var object = null,
                 options = {
                     fill:'black',
                     name:data.id,

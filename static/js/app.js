@@ -23,7 +23,7 @@ $(function(){
             }
             layer.update(options)
         }
-        app.viewport.update();
+        app.viewport.update(options);
         app.stage.draw();
 	});
 

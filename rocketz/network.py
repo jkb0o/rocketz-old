@@ -51,7 +51,7 @@ class Dispatcher(WebSocket):
             self.obj.keys = message['data']
             if self.obj.keys & self.obj.KEY_S:
                 self.obj.shoot_required = True
-        #self.send(message, binary=True)
+#        self.send(message, binary=True)
 
     def send(self, message):
         print "[%d] S> %r" % (id(self), message)

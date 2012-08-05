@@ -1,4 +1,21 @@
 (function(app){
+
+    var Timer = function(){
+        return {
+            lastTimeStamp: null,
+            getDiff: function() {
+                if (!this.lastTimeStamp) {
+                    this.lastTimeStamp = new Date().getTime();
+                    return 0;
+                }
+                var newTimeStamp = new Date().getTime();
+                var diff = newTimeStamp - this.lastTimeStamp;
+                this.lastTimeStamp = newTimeStamp;
+                return diff / 1000;
+            }
+        };
+    };
+
     app.utils = {
         worldPoint: function(data){
             // TODO: remove it to reduce load. New var is for debugging purpose;
@@ -44,7 +61,18 @@
         distance: function(p1, p2){
             var x_d = p1[0] - p2[0];
             var y_d = p1[1] - p2[1];
-            return Math.floor(x_d*x_d + y_d*y_d);
+            return x_d*x_d + y_d*y_d;
+        },
+        timers: {},
+        getTimer: function(name){
+            var timer = this.timers[name];
+            if (timer){
+                return this.timers[name]
+            }
+            timer = Timer();
+            this.timers[name] = timer;
+            return timer
         }
+
     };
 })(Rocketz);
