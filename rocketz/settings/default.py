@@ -22,3 +22,9 @@ PHYSICS_ITERATIONS_VEL = 10     # Number of velocity iterations inside 1 physics
 PHYSICS_ITERATIONS_POS = 10     # Number of position iteration inside 1 physics iteration
 
 RENDER_NETWORK_ITERATIONS = 31.0
+
+# Which highlevel protocol to use to interact between client and server
+# js - pure json messaging
+# binary - binary messaging - should be fast, but not implemented on client side
+# validate - pure js, but validate viwht binary ( sync development purposes )
+PROTOCOL = 'js'

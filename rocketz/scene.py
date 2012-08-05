@@ -166,10 +166,10 @@ class GameObject(Eventable):
         )
         if self.shape_type == 'poly':
             res['shape_type'] = 'poly'
-            res['shape']=b.fixtures[0].shape.vertices
+            res['shape_options']=b.fixtures[0].shape.vertices
         else:
             res['shape_type'] = 'circle'
-            res['radius'] = b.fixtures[0].shape.radius
+            res['shape_options'] = b.fixtures[0].shape.radius
 
         return res
 

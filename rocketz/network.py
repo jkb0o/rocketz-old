@@ -1,5 +1,3 @@
-import json
-
 import gevent
 from ws4py.server.geventserver import WebSocketServer
 from ws4py.websocket import WebSocket
@@ -7,7 +5,7 @@ from ws4py.websocket import WebSocket
 clients = []
 
 from .conf import settings
-from .messaging import notification
+from .messaging import notification, parse
 from .physics import world
 from .scene import scene
 
@@ -48,13 +46,14 @@ class Dispatcher(WebSocket):
 
     def received_message(self, message):
         print "[%d] C> %s" % (id(self), message)
-        message = json.loads(str(message))
+        message = parse(str(message))
         if message['message'] == 'changeKeys':
             self.obj.keys = message['data']
             if self.obj.keys & self.obj.KEY_S:
                 self.obj.shoot_required = True
         #self.send(message, binary=True)
 
-    def send(self, message, binary=False):
-        print "[%d] S> %s" % (id(self), message)
+    def send(self, message):
+        print "[%d] S> %r" % (id(self), message)
+        binary = getattr(settings, 'PROTOCOL', 'json') == 'binary'
         return super(Dispatcher, self).send(message, binary)
