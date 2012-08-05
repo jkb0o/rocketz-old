@@ -1,51 +1,54 @@
 ;(function (app){
+    var util = app.utils;
+
     app.viewport = new Object({
         width: Rocketz.config.viewport.width,
         height: Rocketz.config.viewport.height,
         target: null,
+        viewPortPosition: null,
         update: function(){
-            return;
-
             var battle = app.layers['battle'],
                 back = app.layers['background'];
 
-            if (!battle)    return;
+            if (!battle){
+                return;
+            }
 
             var ww      = app.config.world.width;
             var wh      = app.config.world.height;
+            var target  = battle.viewPortTarget;
 
-            var self    = null;
-
-            for (var i = 0; i < battle.children.length; i++){
-                var child   = battle.children[i];
-                if (child.self) {
-                    self = child;
-                }
+            if (!target){
+                return;
             }
 
-            if (!self)  return;
+            var x = target.getX() - this.width / 2,
+                y = target.getY() - this.height / 2;
 
-            var x = child.worldx - this.width / 2;
-            var y = child.worldy;
+            x = Math.max(0, x);
+            x = Math.min(x, ww - this.width);
+            y = Math.max(0, y);
+            y = Math.min(y, wh - this.height);
 
-            if (x < 0){
-                battle.setX(x);
-                x = 0;
-            }
-            if (y < 0){
-                battle.setY(y);
-                y = 0;
-            }
-            if (x > ww - this.width) {
-                battle.setX(x - ww + this.width);
-                x = ww - this.width;
-            }
-            if (y > wh - this.height) {
-                battle.setY(y - wh + this.height);
-                y = wh - this.height;
-            }
+            var offset = [x, y];
 
-            back.setOffset([x, y]);
+            this.viewPortPosition = offset;
+//
+//            if (!this.viewPortPosition){
+//                this.viewPortPosition = [x, y];
+//            } else {
+//                var distance = util.distance(offset, this.viewPortPosition);
+//                var velocity = [x - this.viewPortPosition[0], y - this.viewPortPosition[1]];
+//                var factor = 30;
+//                this.viewPortPosition = [
+//                    Math.floor(x + velocity[0] * distance / factor),
+//                    Math.floor(y - velocity[1] * distance / factor)
+//                ];
+//
+//            }
+
+            battle.setOffset(this.viewPortPosition);
+            back.setOffset(this.viewPortPosition);
         }
     });
 })(Rocketz);

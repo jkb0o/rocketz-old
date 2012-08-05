@@ -12,14 +12,14 @@
         },
         localPoint: function(data){
             var newPoint = [];
-            newPoint[0] = data[0] * app.config.viewport.x_scale;
-            newPoint[1] = -data[1] * app.config.viewport.y_scale;
+            newPoint[0] = data[0] * app.config.x_scale;
+            newPoint[1] = -data[1] * app.config.y_scale;
             return newPoint;
         },
         velocity: function(data){
             var newVelocity = [];
-            newVelocity[0] = data[0] * app.config.viewport.x_scale;
-            newVelocity[1] = data[1] * app.config.viewport.y_scale;
+            newVelocity[0] = data[0] * app.config.x_scale;
+            newVelocity[1] = data[1] * app.config.y_scale;
             return newVelocity;
         },
         shape: function(data){
@@ -30,6 +30,11 @@
                 shape = shape.concat(point);
             }
             return shape;
+        },
+        distance: function(p1, p2){
+            var x_d = p1[0] - p2[0];
+            var y_d = p1[1] - p2[1];
+            return Math.floor(x_d*x_d + y_d*y_d);
         }
     };
 })(Rocketz);

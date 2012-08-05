@@ -1,5 +1,6 @@
 ;(function(app){
     var layerClass = Kinetic.Layer.extend({
+        viewPortTarget: null,
         init:function (cfg) {
             this._super(cfg);
         },
@@ -14,14 +15,15 @@
                     continue;
                 }
 
-                var vx = child.userData.vel[0] * 50;
-                var vy = child.userData.vel[1] * 50;
+                var vel = utils.velocity(child.userData.vel);
+                var vx = vel[0];
+                var vy = vel[1];
                 var vr = child.userData.avel;
-                var diff = options.timeDiff;
+                var diff = options.timeDiff * 0.001;
 
-                var x = child.getX() + vx * diff * 0.001;
-                var y = child.getY() - vy * diff * 0.001;
-                var r = child.getRotation() + vr * diff * 0.001;
+                var x = child.getX() + vx * diff;
+                var y = child.getY() - vy * diff;
+                var r = child.getRotation() + vr * diff;
 
                 child.setX(x);
                 child.setY(y);
@@ -29,7 +31,8 @@
             }
         },
         obj_created:function (data) {
-            var utils = app.utils;
+            var utils = app.utils,
+                layer = this;
 
             var center = utils.worldPoint(data.center),
                 points = utils.shape(data.shape);
@@ -65,6 +68,7 @@
                 data.self = true;
                 data.x = app.config.viewport.width / 2;
                 data.y = app.config.viewport.height / 2;
+                layer.viewPortTarget = this;
             };
 
             this.add(object);
