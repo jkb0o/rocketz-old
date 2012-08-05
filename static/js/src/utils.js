@@ -19,11 +19,11 @@
         radius: function(data){
             if (data.length){
                 var newRadius = [];
-                newRadius[0] = data[0] * app.config.viewport.x_scale;
-                newRadius[1] = data[1] * app.config.viewport.y_scale;
+                newRadius[0] = data[0] * app.config.x_scale;
+                newRadius[1] = data[1] * app.config.y_scale;
                 return newRadius;
             } else {
-                return data * app.config.viewport.x_scale;
+                return data * app.config.x_scale;
             }
         },
         velocity: function(data){
