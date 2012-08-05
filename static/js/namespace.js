@@ -1,4 +1,5 @@
 Rocketz = {
+    classes: {},
     config: {},
     input: {},
     viewport: null,

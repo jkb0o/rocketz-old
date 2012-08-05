@@ -11,9 +11,11 @@ Rocketz.config.viewport         = {};
 Rocketz.config.viewport.width   = 300;
 Rocketz.config.viewport.height  = 300;
 Rocketz.config.viewport.easingEnabled = true;
-Rocketz.config.viewport.easingStretch = 15;
+Rocketz.config.viewport.easingStretch = 20;
 
 Rocketz.config.x_scale = 50;
 Rocketz.config.y_scale = 50;
 
+
+Rocketz.config.playerShipColor = "#16ba80";
 

@@ -1,4 +1,7 @@
 ;(function(app){
+    var utils = app.utils,
+        config = app.config;
+
     var layerClass = Kinetic.Layer.extend({
         viewPortTarget: null,
         init:function (cfg) {
@@ -30,37 +33,31 @@
                 child.setRotation(r);
             }
         },
-        obj_created:function (data) {
-            var layer = this;
-            var utils = app.utils;
-            var center = utils.worldPoint(data.center);
-            var object = null,
-                options = {
-                    fill:'black',
-                    name:data.id,
-                    rotation:data.angle,
-                    x:center[0],
-                    y:center[1]
-                };
+        addObject: function (data, options, center) {
+            var object = null;
 
-            if (data.shape_type == 'poly'){
+            if (data.shape_type == 'poly') {
                 options.points = utils.shape(data.shape_options);
                 object = new Kinetic.Polygon(options);
             } else {
                 options.radius = utils.radius(data.shape_options);
                 object = new Kinetic.Ellipse(options);
             }
+            object.oldAttributes = {
+                data: data,
+                options: options,
+                center: center
+            };
+            object.data = data;
 
             object.isStatic = data.static;
             object.userData = {
-                pos: data.center.concat(data.angle),
-                vel: [0, 0, 0],
-                obj: data.id
+                pos:data.center.concat(data.angle),
+                vel:[0, 0, 0],
+                obj:data.id
             };
-
             object.worldx = center[0];
             object.worldy = center[1];
-
             object.move = function (data) {
                 var pos = utils.worldPoint(data.pos);
                 this.setX(pos[0]);
@@ -68,14 +65,41 @@
                 this.setRotation(data.rot);
                 this.userData = data;
             };
-            object.identify = function (data) {
-                data.self = true;
-                data.x = app.config.viewport.width / 2;
-                data.y = app.config.viewport.height / 2;
-                layer.viewPortTarget = this;
-            };
-
             this.add(object);
+            return object;
+        },
+        obj_created:function (data) {
+            var center = utils.worldPoint(data.center),
+                options = {
+                    fill:'black',
+                    name: data.id,
+                    rotation:data.angle,
+                    x:center[0],
+                    y:center[1]
+                };
+            this.addObject(data, options, center);
+        },
+        obj_removed:function (data){
+            var object = this.get('.'+data.obj)[0];
+            this.remove(object);
+        },
+        identify: function (data) {
+            var object = this.get('.'+data.obj)[0],
+                old_data = object.oldAttributes.data,
+                options = object.oldAttributes.options;
+
+            options.fill = config.playerShipColor;
+
+            this.remove(object);
+
+            var center = [
+                config.viewport.width / 2,
+                config.viewport.height / 2
+            ];
+
+            object = this.addObject(old_data, options, center);
+            object.self = true;
+            this.viewPortTarget = object;
         }
     });
     app.layers.battle = new layerClass({name: 'battle'});
