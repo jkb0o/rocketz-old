@@ -13,9 +13,9 @@ from .game import Wall
 def start_simulation():
     world.bounds, walls = Wall.chain([
         (0, 0),
-        (20,0),
-        (20,12),
-        (0,12)
+        (30,0),
+        (30,16),
+        (0,16)
     ], width=1.0, closed=True)
 
     Wall.chain([
