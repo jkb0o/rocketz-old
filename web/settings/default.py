@@ -104,10 +104,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'game.urls'
+ROOT_URLCONF = 'web.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'game.wsgi.application'
+WSGI_APPLICATION = 'web.wsgi.application'
 
 TEMPLATE_DIRS = (
     _os.path.join(HOMEDIR, '../templates')
@@ -123,7 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'index'
+    'web.index'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -163,6 +163,6 @@ WEBSOCKET = {
 }
 
 try:
-    from game.settings_local import *
+    from web.settings.local import *
 except ImportError as e:
     print e

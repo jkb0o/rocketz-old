@@ -4,12 +4,10 @@ import importlib
 import sys
 
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument("backend", type=str, choices=['rs', 'web', 'deploy'])
 parser.add_argument("command", type=str)
 
 options, args = parser.parse_known_args()
 
-if options.backend == 'rs':
-    command = importlib.import_module('rocketz.control.%s' % options.command)
-    command.execute(options.command, args)
+command = importlib.import_module('rocketz.control.%s' % options.command)
+command.execute(options.command, args)
 
