@@ -23,9 +23,13 @@ Sometimes to recall an oldschool stuff it's just easier to remake it.
 
 Currently in dev mode using django runserver
 
-    1. Start game greenlets /rctl rs start --fg
+1. Start game greenlets 
+    
+    ./rctl rs start --fg
 
-    2. Start django to serve static ./web/manage.py runserver
+2. Start django to serve static 
+    
+    ./manage.py runserver
 
 
 
