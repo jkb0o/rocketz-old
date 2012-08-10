@@ -6,7 +6,7 @@ from django.conf.urls import patterns, include, url
 from index.views import index
 
 urlpatterns = patterns('',
-    url(r'', index.as_view()),
+    url(r'^$', index.as_view()),
     url(r'^index/', index.as_view())
 
     # Examples:

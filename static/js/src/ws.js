@@ -1,5 +1,5 @@
 (function(app){
-    app.connection = new WebSocket('ws://' + CONFIG.ws);
+    app.connection = new WebSocket('ws://' + ROCKETZ_WEBSOCKET);
 
     // When the connection is open, send some data to the server
     app.connection.onopen = function () {

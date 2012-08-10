@@ -4,7 +4,7 @@ import os as _os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-HOMEDIR = _os.path.abspath(_os.path.join(__file__, '../..'))
+HOMEDIR = _os.path.abspath(_os.path.join(_os.path.dirname(__file__), '../..'))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -62,7 +62,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = _os.path.normpath(_os.path.join(HOMEDIR, '../htdocs/'))
+STATIC_ROOT = _os.path.normpath(_os.path.join(HOMEDIR, 'htdocs'))
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -70,7 +70,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    _os.path.normpath(_os.path.join(HOMEDIR, '../static')),
+    _os.path.normpath(_os.path.join(HOMEDIR, 'static')),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -95,6 +95,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -110,24 +111,37 @@ ROOT_URLCONF = 'web.urls'
 WSGI_APPLICATION = 'web.wsgi.application'
 
 TEMPLATE_DIRS = (
-    _os.path.join(HOMEDIR, '../templates')
+    _os.path.join(HOMEDIR, 'templates')
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
 
 INSTALLED_APPS = (
+    ###########    
+    # core    #
+    ###########    
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'web.index'
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+
+    ###########
+    # plugins #
+    ###########
+    'mediagenerator',
+
+
+    ###########
+    # app     #
+    ###########
+    'web.index'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -158,11 +172,12 @@ LOGGING = {
         },
     }
 }
-WEBSOCKET = {
-    'socket': 'localhost:31337'
-}
+WEBSOCKET = 'localhost:31337'
 
-try:
-    from web.settings.local import *
-except ImportError as e:
-    print e
+
+# mediageneratpor settings
+PRODUCTION_MEDIA_URL = '/st/gm/'
+GENERATED_MEDIA_DIR = _os.path.join(HOMEDIR, 'htdocs/gm')
+DEV_MEDIA_URL = '/devstatic/'
+GENERATED_MEDIA_NAMES_MODULE = 'web.gm'
+GENERATED_MEDIA_NAMES_FILE = _os.path.join(HOMEDIR, 'web/gm.py')

@@ -35,3 +35,7 @@ rocketz/settings/local.py
 web/game/settings_local.py
 
 .idea
+
+# generated media
+htdocs/gm
+web/gm.py
