@@ -84,22 +84,29 @@
             this.remove(object);
         },
         identify: function (data) {
+            console.log('identify', data);
             var object = this.get('.'+data.obj)[0],
                 old_data = object.oldAttributes.data,
                 options = object.oldAttributes.options;
 
+            console.log(1);
             options.fill = config.playerShipColor;
 
             this.remove(object);
+            console.log(2);
 
             var center = [
                 config.viewport.width / 2,
                 config.viewport.height / 2
             ];
+            console.log(3);
 
             object = this.addObject(old_data, options, center);
+            console.log(4);
             object.self = true;
+            console.log(5);
             this.viewPortTarget = object;
+            console.log(6);
         }
     });
     app.layers.battle = new layerClass({name: 'battle'});

@@ -47,15 +47,8 @@ class Scene(Eventable):
         If full = True explain object itself too
         """
         session = obj.session
-        lower, upper = world.bounds
-        session.send(notification("world_info", 
-            lower_bound = lower,
-            upper_bound = upper
-        ))
-
         for go in self:
             if not full and go==obj: continue
-
             msg = notification("obj_created", **go.explain)
             print "Send explain about ", go.id
             session.send(msg)

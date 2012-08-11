@@ -38,20 +38,13 @@
             } else if(options.timeDiff > 10) {
                 var timeDiff = options.timeDiff * 0.001,
                     velocity = [
-                        (x - this.viewPortPosition[0]) / timeDiff / this.factor,
-                        (y - this.viewPortPosition[1]) / timeDiff / this.factor
+                        (x - this.viewPortPosition[0]) * this.factor,
+                        (y - this.viewPortPosition[1]) * this.factor
                     ],
                     viewPortOffset = [
                         velocity[0] * timeDiff,
                         velocity[1] * timeDiff
                     ];
-
-                // NOTE: this may probly be shit
-
-                viewPortOffset = [
-                    Math.abs(viewPortOffset[0]) * viewPortOffset[0],
-                    Math.abs(viewPortOffset[1]) * viewPortOffset[1]
-                ];
 
                 var newPos = [
                     this.viewPortPosition[0] + viewPortOffset[0],

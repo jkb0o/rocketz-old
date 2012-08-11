@@ -12,9 +12,8 @@
     };
     // Log messages from the server
     app.connection.onmessage = function (e) {
-        eval('var evaled = ' + e.data);
-        //console.log('Server: ', evaled);
-        app.process_server_signals(evaled);
+        data = JSON.parse(e.data);
+        app.process_server_signals(data);
     };
 
 })(Rocketz);

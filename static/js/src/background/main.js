@@ -1,20 +1,16 @@
 ;(function(app){
     var layerClass = Kinetic.Layer.extend({
-        init: function(cfg){
-            this._super(cfg);
+        drawGrid: function(w, h){
+            console.log("Draw grid", w, h);
+            var grid        = new Kinetic.Group();
+            var count       = Math.ceil(w / 100) * Math.ceil(h / 100);
+            
             var back    = new Kinetic.Rect({
-                width: app.config.world.width,
-                height: app.config.world.height,
+                width: w,
+                height: h,
                 fill: 'silver'
             });
             this.add(back);
-
-            var grid = this.createGrid(back.getWidth(), back.getHeight());
-            this.add(grid);
-        },
-        createGrid: function(w, h){
-            var grid        = new Kinetic.Group();
-            var count       = Math.ceil(w / 100) * Math.ceil(h / 100);
 
             for (var i = 0; i < count; i++){
                 var r       = new Kinetic.Rect({
@@ -28,7 +24,7 @@
                 grid.add(r);
             }
 
-            return grid;
+            this.add(grid);
         },
         update: function(options){
             return;
@@ -54,5 +50,6 @@
         }
     });
     app.layers.background = new layerClass({name: 'background'});
+    console.log("New layer", app.layers.background);
 })(Rocketz);
 

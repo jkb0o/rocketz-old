@@ -24,18 +24,27 @@ class Dispatcher(WebSocket):
     
     def opened(self):
         clients.append(self)
+        
+        # tell client somthing about worl bounds
+        lower, upper = world.bounds
+        self.send(notification("world_info", 
+            lower_bound = lower,
+            upper_bound = upper
+        ))
 
-        import random
         obj = scene.create_object('rocketz.game.Spaceship', pos=(8,4.8))
-        obj.body.angle = 1.57
         self.obj = obj
         obj.session = self
 
-        # tell client which object is himself
-        self.send(notification("identify", obj=obj.id))
 
         # tell client all about world itself
         scene.explain(self.obj)
+        
+        # tell client which object is himself
+        self.send(notification("identify", obj=obj.id))
+
+        # tell client that init done
+        self.send(notification("init_done"))
 
     def closed(self, code, reason="Not defined"):
         print "Client %s closed connection (%d, reason: %s)" % (self, code, reason)

@@ -17,6 +17,7 @@ $(function(){
         app.stage.add(layer);
     }
 
+
 	app.stage.onFrame(function(options){
         for (var layerName in app.layers){
             var layer = app.layers[layerName];
@@ -57,6 +58,14 @@ $(function(){
         app.connection.send(JSON.stringify({message: 'changeKeys', data: app.input.mask}));
     };
 
+    app.process_init_done = function(){
+        var back = app.layers.background;
+        back.drawGrid(
+            app.config.world.width,
+            app.config.world.height
+        );
+    }
+
     app.process_server_signals = function (data){
         /*
          * data = {
@@ -74,8 +83,24 @@ $(function(){
 
         var battle = app.layers['battle'];
 
+        console.log(data.body.content_type, data.body.content);
+
         if (data.body.content_type == "world_info") {
-            // TODO: implement when Yash will finish backend
+            var lower = data.body.content.lower_bound;
+            var upper = data.body.content.upper_bound;
+            var width = upper[0] - lower[0];
+            var height = upper[1] - lower[1]
+            width |= width;
+            height |= height;
+            width *= app.config.x_scale;
+            height *= app.config.y_scale;
+            app.config.world.width = width;
+            app.config.world.height = height;
+            return;
+        }
+        if (data.body.content_type == "init_done"){
+            app.process_init_done();
+            return;
         }
         if (data.body.content_type == "obj_created") {
             target = battle;
@@ -92,6 +117,7 @@ $(function(){
         if (!target){
             return;
         }
+
         target[data.body.content_type](data.body.content);
     };
 
