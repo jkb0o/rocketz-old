@@ -65,7 +65,7 @@
                 this.setRotation(data.rot);
                 this.userData = data;
             };
-            this.add(object);
+            data.static  ? app.layers.background.add(object) : this.add(object);
             return object;
         },
         obj_created:function (data) {

@@ -13,7 +13,7 @@ MEDIA_BUNDLES = (
         'js/src/background/main.js',
         'js/src/battle/main.js',
         'js/src/viewport/main.js',
-    )
+    ),
 )
 
 
