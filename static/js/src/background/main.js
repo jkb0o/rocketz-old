@@ -1,7 +1,6 @@
 ;(function(app){
     var layerClass = Kinetic.Layer.extend({
         drawGrid: function(w, h){
-            console.log("Draw grid", w, h);
             var grid        = new Kinetic.Group();
             var count       = Math.ceil(w / 100) * Math.ceil(h / 100);
             
@@ -50,6 +49,5 @@
         }
     });
     app.layers.background = new layerClass({name: 'background'});
-    console.log("New layer", app.layers.background);
 })(Rocketz);
 

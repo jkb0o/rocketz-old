@@ -83,8 +83,6 @@ $(function(){
 
         var battle = app.layers['battle'];
 
-        console.log(data.body.content_type, data.body.content);
-
         if (data.body.content_type == "world_info") {
             var lower = data.body.content.lower_bound;
             var upper = data.body.content.upper_bound;
