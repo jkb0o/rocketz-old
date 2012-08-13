@@ -19,3 +19,5 @@ Rocketz.config.y_scale                  = 50;
 
 Rocketz.config.playerShipColor          = "#16ba80";
 
+Rocketz.config.pixelSize                = 2;
+

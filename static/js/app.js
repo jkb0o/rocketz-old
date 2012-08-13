@@ -65,7 +65,6 @@ $(function(){
             app.config.world.height
         );
         back.draw()
-        pixelerize(back.getCanvas().getElement(), 8, 0.5);
     }
 
     app.process_server_signals = function (data){

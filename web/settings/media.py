@@ -2,7 +2,7 @@ MEDIA_BUNDLES = (
     ( 'contrib.js',
         'js/lib/jquery-1.7.2.js',
         'js/lib/kinetic-v3.10.4.js',
-        'js/lib/pixelezator.coffee',
+        'js/lib/pixelimage.coffee',
     ),
     ( 'app.js',
         'js/namespace.js',

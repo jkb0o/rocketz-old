@@ -156,7 +156,8 @@ class GameObject(Eventable):
             id=self.id,
             static=self.is_static,
             center=b.position.tuple,
-            angle=-1*b.angle
+            angle=-1*b.angle,
+            type=self.__class__.__name__,
         )
         if self.shape_type == 'poly':
             res['shape_type'] = 'poly'

@@ -35,8 +35,15 @@
         },
         addObject: function (data, options, center) {
             var object = null;
-
-            if (data.shape_type == 'poly') {
+            if (data.type == 'Spaceship'){
+                options.image = $('#spaceship')[0];
+                // TODO make image size from image, image.onload required;
+                options.offset = { x: 40, y: 40 };
+                options.fill = "rgba(255, 255, 255, 0.0)";
+                options.pixelSize = app.config.pixelSize;
+                object = new Kinetic.PixelImage(options);
+            }
+            else if (data.shape_type == 'poly') {
                 options.points = utils.shape(data.shape_options);
                 object = new Kinetic.Polygon(options);
             } else {
@@ -65,8 +72,7 @@
                 this.setRotation(data.rot);
                 this.userData = data;
             };
-            data.static  ? app.layers.background.add(object) : this.add(object);
-            object.setZIndex(20);
+            this.add(object);
             return object;
         },
         obj_created:function (data) {
