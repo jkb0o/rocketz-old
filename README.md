@@ -19,6 +19,11 @@ Sometimes to recall an oldschool stuff it's just easier to remake it.
     source .env/bin/activate
     pip install -r requrements.txt
 
+On Mac
+
+    brew install nodejs
+    curl https://npmjs.org/install.sh | sh
+
 ## Running
 
 Currently in dev mode using django runserver
