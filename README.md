@@ -23,6 +23,7 @@ On Mac
 
     brew install nodejs
     curl https://npmjs.org/install.sh | sh
+    npm install -g coffee-script
 
 ## Running
 
