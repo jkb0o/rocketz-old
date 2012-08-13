@@ -7,9 +7,10 @@
             var back    = new Kinetic.Rect({
                 width: w,
                 height: h,
-                fill: 'silver'
+                fill: 'silver',
             });
             this.add(back);
+            back.setZIndex(1);
 
             for (var i = 0; i < count; i++){
                 var r       = new Kinetic.Rect({
@@ -17,13 +18,13 @@
                     height: 100,
                     x: (i % (w / 100)) * 100,
                     y: Math.floor(i / (w / 100)) * 100,
-                    stroke: 'red'
+                    stroke: 'red',
+                    zIndex: 0,
                 });
-
                 grid.add(r);
             }
-
             this.add(grid);
+            grid.setZIndex(2);
         },
         update: function(options){
             return;

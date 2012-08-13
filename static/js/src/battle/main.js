@@ -66,6 +66,7 @@
                 this.userData = data;
             };
             data.static  ? app.layers.background.add(object) : this.add(object);
+            object.setZIndex(20);
             return object;
         },
         obj_created:function (data) {
@@ -75,7 +76,8 @@
                     name: data.id,
                     rotation:data.angle,
                     x:center[0],
-                    y:center[1]
+                    y:center[1],
+                    zIndex: 10,
                 };
             this.addObject(data, options, center);
         },
