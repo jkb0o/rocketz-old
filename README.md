@@ -25,7 +25,7 @@ Currently in dev mode using django runserver
 
 1. Start game greenlets 
     
-    ./rctl rs start --fg
+    ./rctl start --fg
 
 2. Start django to serve static 
     
