@@ -31,10 +31,8 @@
             y = Math.max(0, y);
             y = Math.min(y, wh - this.height);
 
-            var offset = [x, y];
-
             if (!this.viewPortPosition | !config.viewport.easingEnabled){
-                this.viewPortPosition = offset;
+                this.viewPortPosition = [app.config.world.width * 0.5, app.config.world.height*0.5]
             } else if(options.timeDiff > 10) {
                 var timeDiff = options.timeDiff * 0.001,
                     velocity = [
@@ -57,7 +55,8 @@
                 {
                     this.viewPortPosition = newPos;
                 }
-            }
+
+            } 
             battle.setOffset(this.viewPortPosition);
             back.setOffset(this.viewPortPosition);
         }

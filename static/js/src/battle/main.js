@@ -31,8 +31,8 @@
                 child.worldx = x;
                 child.worldy = y;
 
-                x -= x % config.pixelSize;
-                y -= y % config.pixelSize;
+                //x -= x % config.pixelSize;
+                //y -= y % config.pixelSize;
 
                 child.setX(x);
                 child.setY(y);
@@ -40,14 +40,16 @@
             }
         },
         addObject: function (data, options, center) {
+            if (data.static && ! app.config.drawStatic){
+                return;
+            }
             var object = null;
             if (data.type == 'Spaceship'){
                 options.image = $('#spaceship')[0];
                 // TODO make image size from image, image.onload required;
                 options.offset = { x: 42, y: 42 };
                 options.fill = "rgba(255, 255, 255, 0.0)";
-                options.pixelSize = app.config.pixelSize;
-                object = new Kinetic.PixelImage(options);
+                object = new Kinetic.Image(options);
             }
             else if (data.shape_type == 'poly') {
                 options.points = utils.shape(data.shape_options);
