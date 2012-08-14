@@ -90,6 +90,15 @@ class Spaceship(GameObject):
             force *= self.FORCE_VALUE
             self.body.ApplyForceToCenter(force)
 
+class ChainShape(GameObject):
+    is_static = True
+    def __init__(self, points):
+        shape = box2d.chainShape(vertices=points)
+        self.fixture_property = dict(
+            shapes=shape
+        )
+        super(ChainShape, self).__init__([0,0])
+
 class Wall(GameObject):
     
     is_static = True

@@ -1,6 +1,7 @@
 // initialize application
 $(function(){
     var app = Rocketz;
+    app.initialized = false;
     app.input.mask    = 0;
 
     // TODO: The workflow will change layers will be initialized after world_info message!
@@ -19,6 +20,9 @@ $(function(){
 
 
 	app.stage.onFrame(function(options){
+        if (!app.initialized){ 
+            return;
+        }
         for (var layerName in app.layers){
             var layer = app.layers[layerName];
             if (!layer){
@@ -60,11 +64,16 @@ $(function(){
 
     app.process_init_done = function(){
         var back = app.layers.background;
-        back.drawGrid(
-            app.config.world.width,
-            app.config.world.height
-        );
+        if (app.config.drawStatic){
+            back.drawGrid(
+                app.config.world.width,
+                app.config.world.height
+            );
+        } else {
+            back.drawLevel()
+        }
         back.draw()
+        app.initialized = true;
     }
 
     app.process_server_signals = function (data){

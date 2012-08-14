@@ -50,7 +50,6 @@ class Scene(Eventable):
         for go in self:
             if not full and go==obj: continue
             msg = notification("obj_created", **go.explain)
-            print "Send explain about ", go.id
             session.send(msg)
 
     def remove_object(self, obj):

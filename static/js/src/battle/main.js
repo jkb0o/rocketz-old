@@ -24,9 +24,15 @@
                 var vr = child.userData.avel;
                 var diff = options.timeDiff * 0.001;
 
-                var x = child.getX() + vx * diff;
-                var y = child.getY() - vy * diff;
+                var x = child.worldx + vx * diff;
+                var y = child.worldy - vy * diff;
                 var r = child.getRotation() + vr * diff;
+
+                child.worldx = x;
+                child.worldy = y;
+
+                //x -= x % config.pixelSize;
+                //y -= y % config.pixelSize;
 
                 child.setX(x);
                 child.setY(y);
@@ -34,14 +40,16 @@
             }
         },
         addObject: function (data, options, center) {
+            if (data.static && ! app.config.drawStatic){
+                return;
+            }
             var object = null;
             if (data.type == 'Spaceship'){
                 options.image = $('#spaceship')[0];
                 // TODO make image size from image, image.onload required;
-                options.offset = { x: 40, y: 40 };
+                options.offset = { x: 42, y: 42 };
                 options.fill = "rgba(255, 255, 255, 0.0)";
-                options.pixelSize = app.config.pixelSize;
-                object = new Kinetic.PixelImage(options);
+                object = new Kinetic.Image(options);
             }
             else if (data.shape_type == 'poly') {
                 options.points = utils.shape(data.shape_options);
@@ -63,12 +71,12 @@
                 vel:[0, 0, 0],
                 obj:data.id
             };
-            object.worldx = center[0];
-            object.worldy = center[1];
             object.move = function (data) {
                 var pos = utils.worldPoint(data.pos);
-                this.setX(pos[0]);
-                this.setY(pos[1]);
+                this.worldx = pos[0];
+                this.worldy = pos[1];
+                //this.setX(pos[0]);
+                //this.setY(pos[1]);
                 this.setRotation(data.rot);
                 this.userData = data;
             };

@@ -1,5 +1,11 @@
 ;(function(app){
     var layerClass = Kinetic.Layer.extend({
+        drawLevel: function(){
+            var lvl = new Kinetic.Image({
+                image: $('#level')[0]
+            });
+            this.add(lvl);
+        },
         drawGrid: function(w, h){
             var grid        = new Kinetic.Group();
             var count       = Math.ceil(w / 100) * Math.ceil(h / 100);
