@@ -6,6 +6,8 @@ $(function(){
 
     // TODO: The workflow will change layers will be initialized after world_info message!
 
+
+
     if ($.isFunction(Rocketz.stage)){
         app.stage = app.stage();
     }
@@ -28,7 +30,9 @@ $(function(){
             if (!layer){
                 continue;
             }
-            layer.update(options)
+            if (layer.update){
+                layer.update(options)
+            }
         }
         app.viewport.update(options);
         app.stage.draw();
@@ -63,16 +67,10 @@ $(function(){
     };
 
     app.process_init_done = function(){
-        var back = app.layers.background;
-        if (app.config.drawStatic){
-            back.drawGrid(
-                app.config.world.width,
-                app.config.world.height
-            );
-        } else {
-            back.drawLevel()
-        }
-        back.draw()
+        app.layers.world.initChildren();
+        app.layers.background.drawLevel();
+        app.layers.world.draw();
+        app.layers.background.draw();
         app.initialized = true;
     }
 

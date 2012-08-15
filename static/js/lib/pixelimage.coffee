@@ -1,3 +1,5 @@
+# -*- wrap: disabled -*-
+
 $ ()->
     $('body').append('<canvas id="pixproxy" style="display:none"></canvas>')
     $('body').append('<canvas id="pixtarget" style="display:none"></canvas>')

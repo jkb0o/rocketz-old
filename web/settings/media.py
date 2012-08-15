@@ -3,6 +3,7 @@ MEDIA_BUNDLES = (
         'js/lib/jquery-1.7.2.js',
         'js/lib/kinetic-v3.10.4.js',
         'js/lib/pixelimage.coffee',
+        'js/lib/vec2.coffee',
     ),
     ( 'app.js',
         'js/namespace.js',
@@ -11,9 +12,10 @@ MEDIA_BUNDLES = (
         'js/src/stage.js',
         'js/src/utils.js',
         'js/src/ws.js',
-        'js/src/background/main.js',
-        'js/src/battle/main.js',
-        'js/src/viewport/main.js',
+        'js/src/layers/background.js',
+        'js/src/layers/battle.js',
+        'js/src/layers/world.coffee',
+        'js/src/viewport.coffee',
     ),
 )
 

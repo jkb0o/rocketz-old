@@ -115,7 +115,8 @@
 
             object = this.addObject(old_data, options, center);
             object.self = true;
-            this.viewPortTarget = object;
+            console.log('set target', object)
+            app.viewport.target = object;
         }
     });
     app.layers.battle = new layerClass({name: 'battle'});

@@ -2,7 +2,8 @@
     var layerClass = Kinetic.Layer.extend({
         drawLevel: function(){
             var lvl = new Kinetic.Image({
-                image: $('#level')[0]
+                id: 'image',
+                image: $('#back')[0]
             });
             this.add(lvl);
         },
