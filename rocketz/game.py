@@ -8,11 +8,11 @@ class Spaceship(GameObject):
     A spaceship controlled by user
     """
 
-    BACK_FORCE = -0.5
+    BACK_FORCE = -0.2
     BACK_TORQUE = -0.3
-    FORCE_VALUE = 4.0
-    TORQUE_VALUE = 1.5
-    ANTIGRAVITY = 0.0, 0.8
+    FORCE_VALUE = 3.0
+    TORQUE_VALUE = 1.3
+    ANTIGRAVITY = 0.0, 5.5
     
     fixture_property = dict(shape=[
         (0.5, 0),
@@ -55,10 +55,10 @@ class Spaceship(GameObject):
         self.shoot_wait = 0.1
 
         bullet_pos = self.body.GetWorldPoint(box2d.vec2(0.7,0))
-        bullet_vel = box2d.vec2()
+        bullet_vel = self.body.linearVelocity.copy()
         bullet_vel.x = cos(self.body.angle)
         bullet_vel.y = sin(self.body.angle)
-        bullet_vel *= 15.0
+        bullet_vel *= 5.0
 
         bullet = scene.create_object('rocketz.game.Bullet', bullet_pos)
         bullet.body.linearVelocity = bullet_vel
@@ -73,7 +73,7 @@ class Spaceship(GameObject):
         self.body.ApplyTorque(self.BACK_TORQUE * self.body.angularVelocity)
 
         # antigravity
-        self.body.ApplyForceToCenter(box2d.vec2(*self.ANTIGRAVITY))
+        self.body.ApplyForceToCenter(self.body.mass * box2d.vec2(*self.ANTIGRAVITY))
 
         if not self.keys: return
         
@@ -84,6 +84,7 @@ class Spaceship(GameObject):
 
         
         if self.keys & self.KEY_W:
+            self.body.ApplyForceToCenter(self.BACK_FORCE * self.body.linearVelocity * 0.5)
             force = box2d.vec2()
             force.x = cos(self.body.angle)
             force.y = sin(self.body.angle)

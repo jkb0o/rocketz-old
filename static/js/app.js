@@ -25,13 +25,14 @@ $(function(){
         if (!app.initialized){ 
             return;
         }
-        for (var layerName in app.layers){
-            var layer = app.layers[layerName];
-            if (!layer){
-                continue;
+        pool = [app.stage]
+        while (pool.length){
+            var elem = pool.shift();
+            if (elem.update){
+                elem.update(options)
             }
-            if (layer.update){
-                layer.update(options)
+            if (elem.nodeType == 'Stage' || elem.nodeType == 'Layer' || elem.nodeType == 'Group'){
+                pool = pool.concat(elem.children)
             }
         }
         app.viewport.update(options);
@@ -61,6 +62,12 @@ $(function(){
 
         if (newMask == oldMask){
             return;
+        }
+        console.log(newMask, newMask & 1)
+        if (newMask & 1){
+            app.stage.get('.smokeEmitter')[0].setParticlesPerSecond(60)
+        } else {
+            app.stage.get('.smokeEmitter')[0].setParticlesPerSecond(3)
         }
         app.input.mask = newMask;
         app.connection.send(JSON.stringify({message: 'changeKeys', data: app.input.mask}));
