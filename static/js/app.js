@@ -121,7 +121,7 @@ $(function(){
             target = battle;
         }
         if (data.body.content_type == "move") {
-            target = battle.get('.'+data.body.content.obj)[0].gameObject
+            target = battle.get('.'+data.body.content.obj)[0]
         }
         if (data.body.content_type == "identify") {
             target = battle;

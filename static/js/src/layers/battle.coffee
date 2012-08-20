@@ -78,7 +78,7 @@ class Battle extends Kinetic.Layer
       app.config.viewport.width / 2,
       app.config.viewport.height / 2
     ];
-    object = this.addObject(old_data, options, center).object;
+    object = this.addObject(old_data, options, center);
     object.self = true;
     app.viewport.target = object;
 
