@@ -37,7 +37,7 @@ As daemon
 
     ./rctl start -d
 
-    or
+or
 
     ./rctl start --daemon
 
