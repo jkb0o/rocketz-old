@@ -2,7 +2,8 @@ from ..launcher import Launcher
 from . import Arg, Help
 
 @Help("Start rocketz battle server")
-@Arg("--fg", action="store_true", help="Run in foreground, no daemonize")
+@Arg("--daemon", action="store_true", help="daemonize")
+@Arg("-d", action="store_true", help="daemonize")
 def execute(options):
     launcher = Launcher()
-    launcher.start(detach = not options.fg)
+    launcher.start(detach = options.d or options.daemon)
