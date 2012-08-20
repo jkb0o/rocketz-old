@@ -109,6 +109,7 @@
                 obj:data.id
             };
             object.move = function (data) {
+                console.log(this)
                 var pos = utils.worldPoint(data.pos);
                 this.worldx = pos[0];
                 this.worldy = pos[1];

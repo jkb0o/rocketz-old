@@ -5,4 +5,4 @@ layerClass = Kinetic.Layer.extend {
         })
         @add(img)
 }
-app.layers.world = new layerClass({name: 'wold'})
+app.layers.world = new layerClass({name: 'world'})

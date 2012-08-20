@@ -27,15 +27,19 @@ class Viewport
             console.log("init world")
             @world = new Vec2(
                 app.config.world.width,
-                app.config.world.height,
+                app.config.world.height
             )
+
+
         targetPos = new Vec2(@target.getX(), @target.getY())
+
         center = @size.mult(-0.5).addThis(targetPos)
         center.limitThis(Vec2.Zero, @world.sub(@size))
 
         timeDiff = options.timeDiff * 0.001
         velocity = center.sub(@pos).multThis(@factor)
         newPos = @pos.add(velocity.multThis(timeDiff))
+
         if !@counter
             console.log(newPos)
 

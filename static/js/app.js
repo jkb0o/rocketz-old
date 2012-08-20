@@ -6,8 +6,6 @@ $(function(){
 
     // TODO: The workflow will change layers will be initialized after world_info message!
 
-
-
     if ($.isFunction(Rocketz.stage)){
         app.stage = app.stage();
     }
@@ -63,12 +61,13 @@ $(function(){
         if (newMask == oldMask){
             return;
         }
-        console.log(newMask, newMask & 1)
+
         if (newMask & 1){
             app.stage.get('.smokeEmitter')[0].setParticlesPerSecond(60)
         } else {
             app.stage.get('.smokeEmitter')[0].setParticlesPerSecond(3)
         }
+
         app.input.mask = newMask;
         app.connection.send(JSON.stringify({message: 'changeKeys', data: app.input.mask}));
     };
@@ -79,7 +78,7 @@ $(function(){
         app.layers.world.draw();
         app.layers.background.draw();
         app.initialized = true;
-    }
+    };
 
     app.process_server_signals = function (data){
         /*
@@ -122,7 +121,7 @@ $(function(){
             target = battle;
         }
         if (data.body.content_type == "move") {
-            target = battle.get('.'+data.body.content.obj)[0]
+            target = battle.get('.'+data.body.content.obj)[0].gameObject
         }
         if (data.body.content_type == "identify") {
             target = battle;

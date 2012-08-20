@@ -73,6 +73,5 @@
             this.timers[name] = timer;
             return timer
         }
-
     };
 })(Rocketz);

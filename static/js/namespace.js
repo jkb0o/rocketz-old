@@ -5,6 +5,7 @@ Rocketz = {
     viewport: null,
     stage : null,
     layers: {},
+    objects: {},
     utils: {},
     connection: {}
 };
