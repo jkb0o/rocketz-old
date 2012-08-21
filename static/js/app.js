@@ -4,11 +4,9 @@ $(function(){
     app.initialized = false;
     app.input.mask    = 0;
 
-    // TODO: The workflow will change layers will be initialized after world_info message!
+    app.stage = app.classes.stage();
 
-    if ($.isFunction(Rocketz.stage)){
-        app.stage = app.stage();
-    }
+    // TODO: The workflow will change layers will be initialized after world_info message!
 
     for (var layerName in app.layers){
         var layer = app.layers[layerName];

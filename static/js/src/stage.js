@@ -1,7 +1,7 @@
 ;(function(app){
     var _stageInstance = null;
 
-    app.stage = function(){
+    app.classes.stage = function(){
         if (!_stageInstance){
             _stageInstance = new Kinetic.Stage({
                 container	: 'workspace',
