@@ -6,7 +6,7 @@
 # python-dev
 
 
--e git+git://github.com/ostrovok-team/django-mediagenerator.git@06a1d2164e87cd8f2e6bfe3ed2d613016d2da90a#egg=mediagenerator
+-e git+git://github.com/ostrovok-team/django-mediagenerator.git@eaec90734431c3993b77a8695d5bac70263ded9c#egg=mediagenerator
 -e svn+http://pybox2d.googlecode.com/svn/trunk/#egg=Box2D
 construct==2.06
 django==1.4
