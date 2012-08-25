@@ -1,6 +1,7 @@
 MEDIA_BUNDLES = (
     ( 'contrib.js',
         'js/lib/jquery-1.7.2.js',
+        'js/lib/underscore-1.3.3.js',
         'js/lib/kinetic-v3.10.4.js',
         'js/lib/pixelimage.coffee',
         'js/lib/particles.coffee',
@@ -9,11 +10,9 @@ MEDIA_BUNDLES = (
     ( 'app.js',
         'js/namespace.js',
         'js/config.js',
-        'js/app.js',
+        'js/app.coffee',
         'js/src/utils.js',
-        'js/src/ws.js',
-        #        'js/src/stage.coffee',
-        'js/src/stage.js',
+        'js/src/sockets/rocketSocket.coffee',
         'js/src/objects/gameObject.coffee',
         'js/src/objects/ellipse.coffee',
         'js/src/objects/polygon.coffee',
@@ -21,7 +20,7 @@ MEDIA_BUNDLES = (
         'js/src/layers/background.coffee',
         'js/src/layers/battle.coffee',
         'js/src/layers/world.coffee',
-        'js/src/viewport.coffee',
+        'js/src/basicViewport.coffee',
     ),
 )
 

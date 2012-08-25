@@ -1,11 +1,11 @@
 class World extends Kinetic.Layer
-  constructor: () ->
+  constructor: (@stage, width, height, zIndex = 1) ->
     @init({name: 'world'})
-
-  initChildren: () ->
+    @stage.add(@)
+    @setZIndex(zIndex)
     img = new Kinetic.Image({
       image: $('#world')[0]
     })
     @add(img)
 
-app.layers.world = new World()
+app.classes.layers.World = World

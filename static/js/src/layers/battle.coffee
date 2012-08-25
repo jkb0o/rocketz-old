@@ -1,15 +1,21 @@
 class Battle extends Kinetic.Layer
-  constructor: () ->
+  constructor: (@stage, zIndex = 2) ->
     @init({name: 'battle'})
-    @config = app.config
+    @stage.add(@)
+    @setZIndex(zIndex)
+    @config = @stage.config
+    @objClasses = app.classes.objects
+
+  getByClass: (className) ->
+    return @get('.'+className)[0]
 
   update: (options) ->
-    @drawObject(object, options) for object in @children when object.userData and !object.isStatic
+    console.log(@children)
+    for object in @children #when object.userData and !object.isStatic
+      @drawObject(object, options)
 
   drawObject: (object, options) ->
     vel = app.utils.velocity(object.userData.vel);
-
-#    console.log('draw', object.worldx, object.worldy)
 
     vx = vel[0];
     vy = vel[1];
@@ -36,15 +42,21 @@ class Battle extends Kinetic.Layer
       return
 
     switch data.type
-      when 'Spaceship' then object = new app.objects.SpaceShip(options, data, center)
-      when 'Poly' then object = new app.objects.Polygon(options, data, center)
-      else object = new app.objects.Ellipse(options, data, center)
+      when 'Spaceship' then object = new @objClasses.SpaceShip(options, data, center)
+      when 'Poly' then object = new @objClasses.Polygon(options, data, center)
+      when 'Bullet' then object = new @objClasses.Ellipse(options, data, center)
+      else
+        object = null
+
+    if not object
+      return
 
     @add(object.getLayerObject())
     return object
 
 
   obj_created: (data) ->
+    console.log('created')
     center = app.utils.worldPoint(data.center)
     options = {
         fill:'black',
@@ -54,17 +66,17 @@ class Battle extends Kinetic.Layer
         y:center[1],
         zIndex: 10,
     };
-    return @addObject(data, options, center);
+    @addObject(data, options, center)
 
 
   obj_removed: (data) ->
+    console.log('removed')
     id = '.'+data.obj
     objects = @get(id)
     @remove(objects[0])
 
 
   identify: (data) ->
-    console.log('identify')
     id = '.'+data.obj
     objects = this.get('.'+data.obj)
     object = objects[0]
@@ -72,14 +84,14 @@ class Battle extends Kinetic.Layer
     old_data = object.oldAttributes.data
     options = object.oldAttributes.options
 
-    options.fill = app.config.playerShipColor
+    options.fill = @config.playerShipColor
     @remove(object);
     center = [
-      app.config.viewport.width / 2,
-      app.config.viewport.height / 2
+      @config.viewport.width / 2,
+      @config.viewport.height / 2
     ];
     object = this.addObject(old_data, options, center);
     object.self = true;
-    app.viewport.target = object;
+    @stage.viewport.target = object;
 
-app.layers.battle = new Battle()
+app.classes.layers.Battle = Battle

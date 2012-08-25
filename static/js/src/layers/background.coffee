@@ -1,6 +1,8 @@
 class Background extends Kinetic.Layer
-  constructor: () ->
+  constructor: (@stage, zIndex = 0) ->
     @init({name: 'background'})
+    @stage.add(@)
+    @setZIndex(zIndex)
 
   drawLevel: () ->
     lvl = new Kinetic.Image({
@@ -25,7 +27,7 @@ class Background extends Kinetic.Layer
         width: 100
         height: 100
         x: (index % (width / 100)) * 100
-        y: Math.floor(index / (width / 100)) * 100
+        y: Math.floor(index / (width /  100)) * 100
         stroke: 'red'
         zIndex: 0
 
@@ -39,4 +41,4 @@ class Background extends Kinetic.Layer
   update: (options) ->
     return
 
-app.layers.background = new Background()
+app.classes.layers.Background = Background

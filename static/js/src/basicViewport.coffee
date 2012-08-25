@@ -1,16 +1,17 @@
-class Viewport
-    constructor: ()->
-        @frontLayers = [app.layers.world, app.layers.battle]
-        @backLayer = app.layers.background
-        @size = new Vec2(
-            app.config.viewport.width,
-            app.config.viewport.height,
-        )
-        @pos = new Vec2(0, 0)
-        @target = null
-        @back = null        # background size
-        @world = null       # world size
-        @factor = app.config.viewport.easingStretch
+class app.classes.viewports.BasicViewport
+    constructor: (@app)->
+      @frontLayers = [@app.layers.world, @app.layers.battle]
+      @backLayer = @app.layers.background
+
+      @size = new Vec2(
+        @app.config.viewport.width,
+        @app.config.viewport.height
+      )
+      @pos = new Vec2(0, 0)
+      @target = null
+      @back = null        # background size
+      @world = null       # world size
+      @factor = app.config.viewport.easingStretch
 
 
     update: (options)->
@@ -26,10 +27,9 @@ class Viewport
         if !@world
             console.log("init world")
             @world = new Vec2(
-                app.config.world.width,
-                app.config.world.height
+                @app.config.world.width,
+                @app.config.world.height
             )
-
 
         targetPos = new Vec2(@target.getX(), @target.getY())
 
@@ -39,9 +39,6 @@ class Viewport
         timeDiff = options.timeDiff * 0.001
         velocity = center.sub(@pos).multThis(@factor)
         newPos = @pos.add(velocity.multThis(timeDiff))
-
-        if !@counter
-            console.log(newPos)
 
         if newPos.valid()
             @pos = newPos
@@ -56,6 +53,5 @@ class Viewport
         backOffset = @size.sub(@back).multThis(backOffset).multThis(-1)
         @backLayer.setOffset(backOffset.xy())
         
-        @counter = true
 
-app.viewport = new Viewport()
+

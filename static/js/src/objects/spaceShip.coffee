@@ -1,4 +1,4 @@
-class SpaceShip extends app.objects.GameObject
+class SpaceShip extends app.classes.objects.GameObject
   constructor: (options, data, center) ->
     super(options, data, center)
     @buildShip()
@@ -16,7 +16,7 @@ class SpaceShip extends app.objects.GameObject
     emitter = new Kinetic.Emitter({
       name: 'smokeEmitter',
       particleType: 'Sprite',
-      world: app.layers.battle,
+      world: app.application.layers.battle,
       x: -40, y: 0,
       lifeTime: [0.5, 2.5],
       linearVelocity: [0,100],
@@ -48,4 +48,4 @@ class SpaceShip extends app.objects.GameObject
     @add(emitter)
     emitter.start()
 
-app.objects.SpaceShip = SpaceShip
+app.classes.objects.SpaceShip = SpaceShip

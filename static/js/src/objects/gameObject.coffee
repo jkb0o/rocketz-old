@@ -8,6 +8,7 @@ class GameObject extends Kinetic.Group
     }
     @data = data;
     @isStatic = data.static;
+
     @userData = {
       pos: data.center.concat(data.angle),
       vel: [0, 0, 0],
@@ -18,10 +19,12 @@ class GameObject extends Kinetic.Group
     pos = app.utils.worldPoint(data.pos)
     @worldx = pos[0]
     @worldy = pos[1]
+    @setX(pos[0])
+    @setY(pos[1])
     @setRotation(data.rot)
     @userData = data
 
   getLayerObject: ->
-      return @
+    return @
 
-app.objects.GameObject = GameObject
+app.classes.objects.GameObject = GameObject

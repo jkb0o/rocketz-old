@@ -1,7 +1,7 @@
-class Polygon extends app.objects.GameObject
+class Polygon extends app.classes.objects.GameObject
   constructor: (options, data, center) ->
     super(options, data, center)
     options.points = app.utils.shape(data.shape_options);
     @add(new Kinetic.Polygon(options))
 
-app.objects.Polygon = Polygon
+app.classes.objects.Polygon = Polygon

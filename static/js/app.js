@@ -18,7 +18,7 @@ $(function(){
 
 
 	app.stage.onFrame(function(options){
-        if (!app.initialized){ 
+        if (!app.initialized){
             return;
         }
         pool = [app.stage]
