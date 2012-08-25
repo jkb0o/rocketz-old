@@ -1,179 +1,247 @@
 # -*- wrap: disabled -*-
-Kinetic.Emitter = Kinetic.Group.extend {
+class Kinetic.ParticlePool
+  constructor: ( @name, @numParticles, @numConfigs, @config ) ->
+    @particles = []
+    @particlesUsed = 0
+    @configs = []
 
-    init: (config) ->
-        @setDefaultAttrs {
-            linearVelocity: [50, 100],
-            linearAcceleration: [0, 0],
-            angularVelocity: [0, 0],
-            angularAcceleration: [0, 0],
-            alphaFrom: [1,1],
-            alphaTo: [1,1],
-            scaleFrom: [1,1],
-            scaleTo: [1,1],
-            lifeTime: [1, 2],
-            particleRotation: [0, 0]
-            particlesPerSecond: 20,
-            particleType: 'Ellipse',
-            particleArgs: {},
-            world: null
-        }
-        @nodeType = 'Group'
-        @particles = []
-        @unspawned = 0
-        @_super(config)
+    @config.linearVelocity ||= [50, 100]
+    @config.linearAcceleration || = [0, 0]
+    @config.angularVelocity ||= [0, 0]
+    @config.angularAcceleration ||= [0, 0]
+    @config.alphaFrom ||= [1, 1]
+    @config.alphaTo || [1, 1]
+    @config.scaleFrom ||= [1, 1]
+    @config.scaleTo ||= [1, 1]
+    @config.lifeTime ||= [1, 2]
+    @config.rotation ||= [0, 0]
 
+    @config.value = (attr)->
+      if @[attr][0] == @[attr][1]
+        return @[attr][0]
+      else
+        return @[attr][0] + Math.random() * ( @[attr][1] - @[attr][0] )
 
-    generate: (attr)->
-        if @attrs[attr][0] == @attrs[attr][1]
-            return @attrs[attr][0]
-        else
-            return @attrs[attr][0] + Math.random() * ( @attrs[attr][1] - @attrs[attr][0] )
-        
-        
-    spawnParticles: ( timeDelta )->
-        @unspawned += timeDelta
-        spawnTime = 1/ @attrs.particlesPerSecond
-        spawned = 0
-        while @unspawned >= spawnTime
-            spawned += 1
-            @unspawned -= spawnTime
-            @spawnParticle(timeDelta)
-        
+  size: ()->
+    @particlesUsed + @particles.length
 
-    removeParticles: ( timeDelta)->
-        toRemove = []
-        index = 0
-        for particle in @particles
-            if particle.life <= 0
-                @attrs.world.remove(particle)
-                toRemove.push(index)
-            index += 1
-
-        while toRemove.length
-            @particles.splice(toRemove.pop(), 1)
-
-
-
-
-    spawnParticle: ( timeDelta )->
-        shape = new Kinetic[@attrs.particleType](@attrs.particleArgs)
-        particle = new Kinetic.Particle {
-            name: 'part',
-            linearVelocity: @generate('linearVelocity'),
-            angularVelocity: @generate('angularVelocity'),
-            linearAcceleration: @generate('linearAcceleration'),
-            angularAcceleration: @generate('angularAcceleration'),
-            lifeTime: @generate('lifeTime'),
-            alphaFrom: @generate('alphaFrom'),
-            alphaTo: @generate('alphaTo'),
-            scaleFrom: @generate('scaleFrom'),
-            scaleTo: @generate('scaleTo'),
-            relativeVelocity: @attrs.relativeVelocity,
-        }
-        @add(particle)
-        pos = particle.getAbsolutePosition()
-        @remove(particle)
-        @attrs.world.add(particle)
-        particle.setAbsolutePosition(pos)
-        particle.add(shape)
-        @particles.push(particle)
-        
-        rotation = @getRotation() + @generate('particleRotation')
-        parent = @parent
-        while parent
-            rotation += parent.getRotation()
-            parent = parent.parent
-        particle.setRotation(rotation)
-
-        if not @attrs.relativeVelocity
-            particle.normalVelocity = {
-                x: Math.cos(rotation) * particle.attrs.linearVelocity,
-                y: Math.sin(rotation) * particle.attrs.linearVelocity
-            }
-
-        if @attrs.particleType == 'Sprite'
-            if @attrs.playAnimation
-                shape.start()
-
-            if @attrs.randomFrame
-                frames = shape.getAnimations()[shape.getAnimation()].length
-                frame = parseInt(Math.random() * frames)
-                shape.setIndex(frame)
+  get: ()->
+    if @size() < @numParticles
+      particle = @createParticle()
+    else if @particles.length
+      particle = @particles.shift()
+    else
+      throw new Error('No free particles in pool ' + @name)
     
-    start: ()->
-        if @started
-            return
-        @unspawned = 0
-        @started = true
+    @particlesUsed += 1
+    config = @getConfig()
+    particle.setConfig(config)
+    return particle
 
-    stop: ()->
-        @started = false
+  release: (particle)->
+    @particlesUsed -= 1
+    @particles.push particle
 
-    setParticlesPerSecond: (num)->
-        @attrs.particlesPerSecond = num
-        @unspawned = 0
+  getConfig: ()->
+    if @configs.length == @numConfigs
+      config = @configs.shift()
+      @configs.push config
+      return config
+      
+    conf = {}
+    conf[attr] = @config.value(attr) for attr in [
+      'linearVelocity',
+      'linearAcceleration',
+      'angularVelocity',
+      'angularAcceleration',
+      'alphaFrom',
+      'alphaTo',
+      'scaleFrom',
+      'scaleTo',
+      'lifeTime',
+      'rotation'
+    ]
 
-    getParticlesPerSecond: ()->
-        @particlesPerSecond
+    @configs.push conf
+    return conf
 
-    update: (timer)->
-        delta = timer.timeDiff * 0.001
-        @removeParticles(delta)
-        if @started
-            @spawnParticles(delta)
-}
+  createParticle: ()->
+    shape = new Kinetic[@config.shapeType](@config.shapeArgs)
+    particle = new Kinetic.Particle(shape, @)
+    return particle
 
 
-Kinetic.Particle = Kinetic.Group.extend {
-    init: (config)->
-        @_super(config)
-        @resetDynamics()
+class Kinetic.ParticleEmitter extends Kinetic.Group
 
-    resetDynamics: ()->
-        @life = @attrs.lifeTime
-        @linearVelocity = @attrs.linearVelocity
-        @angularVelocity = @attrs.angularVelocity
+  @fromConfig: (config)->
+    particleConfig = config.particleConfig || {}
+    delete config.particleConfig
+
+    if config.poolSize
+      poolSize = config.poolSize
+    else
+      if particleConfig.lifeTime
+        particleLifeTime = particleConfig.lifeTime[1]
+      else
+        particleLifeTime = 2
+      particlesPerSecond = config.particlesPerSecond || 50
+      poolSize = particlesPerSecond * particleLifeTime
+      poolSize *= 1.1
+      poolSize = Math.round poolSize
+
+    numConfigs = config.numConfigs || 100
+    name = config.name || 'unnamedEmitter'
+    config.pool = new Kinetic.ParticlePool name, poolSize, numConfigs, particleConfig
+
+    return new Kinetic.ParticleEmitter(config)
+
+  init: (config) ->
+    @nodeType = 'Group'
+    @particles = []
+    @unspawned = 0
+    @world = config.world
+    @pool = config.pool
+    @particlesPerSecond = config.particlesPerSecond || 50
+
+    super(config)
+
+  spawnParticles: ( timeDelta )->
+    @unspawned += timeDelta
+    spawnTime = 1/ @particlesPerSecond
+    spawned = 0
+    while @unspawned >= spawnTime
+      spawned += 1
+      @unspawned -= spawnTime
+
+      particle = @pool.get()
+      particle.addRelativeTo(@)
+      @particles.push particle
+    
+
+  removeParticles: ( timeDelta)->
+    toRemove = []
+    index = 0
+    for particle in @particles
+      if particle.life <= 0
+        @world.remove(particle)
+        toRemove.push(index)
+        particle.release()
+      index += 1
+
+    while toRemove.length
+      @particles.splice(toRemove.pop(), 1)
+
+  start: ()->
+    if @started
+      return
+    @unspawned = 0
+    @started = true
+
+  stop: ()->
+    @started = false
+
+  setParticlesPerSecond: (num)->
+    @particlesPerSecond = num
+    @unspawned = 0
+
+  getParticlesPerSecond: ()->
+    @particlesPerSecond
+
+  update: (timer)->
+    delta = timer.timeDiff * 0.001
+    @removeParticles(delta)
+    if @started
+      @spawnParticles(delta)
 
 
-    update: (timer)->
-        if @life <= 0
-            return
+class Kinetic.Particle extends Kinetic.Group
+  init: (shape, pool)->
+    super({})
+    @shape = shape
+    @pool = pool
+    @config = null
 
-        timeDelta = timer.timeDiff * 0.001
-        rot = @getRotation()
+  setConfig: (config)->
+    @config = config
+    @life = config.lifeTime
+    @linearVelocity = config.linearVelocity
+    @angularVelocity = config.angularVelocity
+    @setX(0)
+    @setY(0)
 
-        if @attrs.relativeVelocity
-            vx = Math.cos(rot) * @linearVelocity
-            vy = Math.sin(rot) * @linearVelocity
-        else
-            vx = @normalVelocity.x
-            vy = @normalVelocity.y
+  addRelativeTo: (emitter)->
+    # add to world, relative to emitter
+    emitter.add(@)
+    pos = @getAbsolutePosition()
+    emitter.remove(@)
+    emitter.world.add(@)
+    @setAbsolutePosition(pos)
+    @add(@shape)
+    
+    # caclulate world rotation
+    rotation = emitter.getRotation() + @config.rotation
+    parent = emitter.parent
+    while parent
+      rotation += parent.getRotation()
+      parent = parent.parent
+    @setRotation(rotation)
 
-        pos = @getPosition()
-        pos.x += vx * timeDelta
-        pos.y += vy * timeDelta
-        @setPosition(pos)
-        @setRotation(@getRotation() + @angularVelocity * timeDelta)
+    # caclculate velocity if it direction is static on particle lifetime
+    if !@config.relativeVelocity
+      @normalVelocity =
+        x: Math.cos(rotation) * @config.linearVelocity
+        y: Math.sin(rotation) * @config.linearVelocity
+   
+    # start particle aminamation if needded
+    if @config.shapeType == 'Sprite'
+      if @config.playAnimation
+        @shape.start()
 
-        @linearVelocity = Math.max(0, @linearVelocity - @attrs.linearAcceleration * timeDelta)
-        @angularVelocity = @angularVelocity - @attrs.angularAcceleration * timeDelta
-        
-        timeFactor = 1 - (@attrs.lifeTime - @life) / @attrs.lifeTime
-        
-        if @attrs.alphaFrom == @attrs.alphaTo
-            @getChildren()[0].setAlpha(@attrs.alphaTo)
-        else
-            alpha = @attrs.alphaTo + (@attrs.alphaFrom - @attrs.alphaTo) * timeFactor 
-            alpha = Math.max(0, alpha)
-            alpha = Math.min(1, alpha)
-            @getChildren()[0].setAlpha(alpha)
-        
-        if @attrs.scaleFrom == @attrs.scaleTo
-            @getChildren()[0].setScale(@attrs.scaleTo)
-        else
-            scale = @attrs.scaleTo + (@attrs.scaleFrom - @attrs.scaleTo) * timeFactor 
-            @getChildren()[0].setScale(scale)
+      if @config.randomFrame
+        frames = @shape.getAnimations()[@shape.getAnimation()].length
+        frame = Math.random() * frames << 0
+        @shape.setIndex frame
 
-        @life -= timeDelta
-}
+  release: ()->
+    @pool.release(@)
+
+  update: (timer)->
+    if @life <= 0
+      return
+
+    timeDelta = timer.timeDiff * 0.001
+    rot = @getRotation()
+
+    if @config.relativeVelocity
+      vx = Math.cos(rot) * @linearVelocity
+      vy = Math.sin(rot) * @linearVelocity
+    else
+      vx = @normalVelocity.x
+      vy = @normalVelocity.y
+
+    pos = @getPosition()
+    pos.x += vx * timeDelta
+    pos.y += vy * timeDelta
+    @setPosition(pos)
+    @setRotation(@getRotation() + @angularVelocity * timeDelta)
+
+    @linearVelocity = Math.max(0, @linearVelocity - @config.linearAcceleration * timeDelta)
+    @angularVelocity = @angularVelocity - @config.angularAcceleration * timeDelta
+    
+    timeFactor = 1 - (@config.lifeTime - @life) / @config.lifeTime
+    
+    if @config.alphaFrom == @config.alphaTo
+      @getChildren()[0].setAlpha(@config.alphaTo)
+    else
+      alpha = @config.alphaTo + (@config.alphaFrom - @config.alphaTo) * timeFactor
+      alpha = Math.max(0, alpha)
+      alpha = Math.min(1, alpha)
+      @getChildren()[0].setAlpha(alpha)
+
+    if @config.scaleFrom == @config.scaleTo
+      @getChildren()[0].setScale(@config.scaleTo)
+    else
+      scale = @config.scaleTo + (@config.scaleFrom - @config.scaleTo) * timeFactor
+      @getChildren()[0].setScale(scale)
+
+    @life -= timeDelta

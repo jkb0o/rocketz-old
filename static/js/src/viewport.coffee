@@ -15,16 +15,13 @@ class Viewport
 
     update: (options)->
         if !@target
-            console.log("no target")
             return
         
         if @backLayer && !@back
-            console.log("init back")
             img = @backLayer.get('#image')[0]
             @back = new Vec2(img.getWidth(), img.getHeight())
 
         if !@world
-            console.log("init world")
             @world = new Vec2(
                 app.config.world.width,
                 app.config.world.height
@@ -39,9 +36,6 @@ class Viewport
         timeDiff = options.timeDiff * 0.001
         velocity = center.sub(@pos).multThis(@factor)
         newPos = @pos.add(velocity.multThis(timeDiff))
-
-        if !@counter
-            console.log(newPos)
 
         if newPos.valid()
             @pos = newPos
