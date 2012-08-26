@@ -147,11 +147,18 @@ class Kinetic.ParticleEmitter extends Kinetic.Group
   getParticlesPerSecond: ()->
     @particlesPerSecond
 
+  updateParticles: (timer) ->
+    for particle in @particles
+      particle.update(timer)
+
   update: (timer)->
     delta = timer.timeDiff * 0.001
     @removeParticles(delta)
     if @started
       @spawnParticles(delta)
+
+    @updateParticles(timer)
+
 
 
 class Kinetic.Particle extends Kinetic.Group

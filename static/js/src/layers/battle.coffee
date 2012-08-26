@@ -10,8 +10,8 @@ class Battle extends Kinetic.Layer
     return @get('.'+className)[0]
 
   update: (options) ->
-    console.log(@children)
-    for object in @children #when object.userData and !object.isStatic
+
+    for object in @children when object? and object.userData? and !object.isStatic
       @drawObject(object, options)
 
   drawObject: (object, options) ->
@@ -32,6 +32,9 @@ class Battle extends Kinetic.Layer
     object.setX(x);
     object.setY(y);
     object.setRotation(r);
+
+    if object.update?
+      object.update(options)
 
   doNothing: ()->
 
@@ -56,7 +59,6 @@ class Battle extends Kinetic.Layer
 
 
   obj_created: (data) ->
-    console.log('created')
     center = app.utils.worldPoint(data.center)
     options = {
         fill:'black',
@@ -70,7 +72,6 @@ class Battle extends Kinetic.Layer
 
 
   obj_removed: (data) ->
-    console.log('removed')
     id = '.'+data.obj
     objects = @get(id)
     @remove(objects[0])

@@ -46,7 +46,6 @@ class Application extends Kinetic.Stage
 #        pool = pool.concat(elem.children)
 
 
-    #    l.update(options) for l in @layers
     for layer in [@layers.battle, @layers.background]
       layer.update(options)
 
@@ -82,8 +81,6 @@ class Application extends Kinetic.Stage
 
 
   dispatch: (type, content) ->
-    console.log(type)
-
     switch type
       when "world_info" then @setWorldInfo(content)
       when "init_done" then @initDone(content)

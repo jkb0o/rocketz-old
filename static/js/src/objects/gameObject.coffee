@@ -1,6 +1,21 @@
 class GameObject extends Kinetic.Group
+  parseConfig: (config, allowedOptions) ->
+    newConfig = {}
+    newConfig[option] = config[option] for option in allowedOptions when config[option]?
+    return newConfig
+
   constructor: (options, data, center) ->
-    @init(options)
+    allowedOptions = [
+      'x', 'y', 'offset',
+      'visible', 'opacity',
+      'listening',
+      'id', 'name',
+      'scale',
+      'rotation', 'rotationDeg',
+      'draggable', 'dragConstraint', 'dragBounds'
+    ]
+    @init(@parseConfig(options, allowedOptions))
+
     @oldAttributes = {
       data: data,
       options: options,
