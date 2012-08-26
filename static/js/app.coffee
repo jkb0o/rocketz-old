@@ -82,6 +82,8 @@ class Application extends Kinetic.Stage
 
 
   dispatch: (type, content) ->
+    console.log(type)
+
     switch type
       when "world_info" then @setWorldInfo(content)
       when "init_done" then @initDone(content)
