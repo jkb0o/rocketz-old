@@ -17,4 +17,4 @@ class RocketSocket
   send: (data) ->
     @socket.send(JSON.stringify(data))
 
-app.classes.sockets.RocketSocket = RocketSocket
+ns.classes.sockets.RocketSocket = RocketSocket

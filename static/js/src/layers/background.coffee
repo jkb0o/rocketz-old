@@ -41,4 +41,4 @@ class Background extends Kinetic.Layer
   update: (options) ->
     return
 
-app.classes.layers.Background = Background
+ns.classes.layers.Background = Background

@@ -1,4 +1,4 @@
-class app.classes.viewports.BasicViewport
+class ns.classes.viewports.BasicViewport
     constructor: (@app)->
       @frontLayers = [@app.layers.world, @app.layers.battle]
       @backLayer = @app.layers.background
@@ -11,7 +11,7 @@ class app.classes.viewports.BasicViewport
       @target = null
       @back = null        # background size
       @world = null       # world size
-      @factor = app.config.viewport.easingStretch
+      @factor = ns.config.viewport.easingStretch
 
 
     update: (options)->

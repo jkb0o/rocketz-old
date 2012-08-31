@@ -31,7 +31,7 @@ class GameObject extends Kinetic.Group
     }
 
   move: (data) ->
-    pos = app.utils.worldPoint(data.pos)
+    pos = ns.utils.worldPoint(data.pos)
     @worldx = pos[0]
     @worldy = pos[1]
     @setX(pos[0])
@@ -42,4 +42,4 @@ class GameObject extends Kinetic.Group
   getLayerObject: ->
     return @
 
-app.classes.objects.GameObject = GameObject
+ns.classes.objects.GameObject = GameObject

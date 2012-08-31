@@ -8,4 +8,4 @@ class World extends Kinetic.Layer
     })
     @add(img)
 
-app.classes.layers.World = World
+ns.classes.layers.World = World

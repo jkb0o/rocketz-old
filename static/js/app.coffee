@@ -2,19 +2,18 @@ class Application extends Kinetic.Stage
   constructor: () ->
     @init({
       container: 'workspace',
-      width: app.config.viewport.width,
-      height: app.config.viewport.height
+      width: ns.config.viewport.width,
+      height: ns.config.viewport.height
     })
 
     @input = {
       mask: 0
     }
 
-    @config = app.config
-    @layerClasses = app.classes.layers
-    @objClasses = app.classes.objects
-    @viewportsClasses = app.classes.viewports
-
+    @config = ns.config
+    @layerClasses = ns.classes.layers
+    @objClasses = ns.classes.objects
+    @viewportsClasses = ns.classes.viewports
 
     @layers =
       background : new @layerClasses.Background(@)
@@ -22,7 +21,7 @@ class Application extends Kinetic.Stage
 
     @viewport = null
 
-    @connection = new app.classes.sockets.RocketSocket(@)
+    @connection = new ns.classes.sockets.RocketSocket(@)
 
     # TODO: rethink
     document.body.addEventListener('keydown', $.proxy(@processUserInput, @));
@@ -60,8 +59,8 @@ class Application extends Kinetic.Stage
     height = upper[1] - lower[1];
     width |= width;
     height |= height;
-    width *= app.config.x_scale;
-    height *= app.config.y_scale;
+    width *= ns.config.x_scale;
+    height *= ns.config.y_scale;
     @config.world.width = width;
     @config.world.height = height;
     @layers.world = new @layerClasses.World(@, @config.world.width, @config.world.height)
@@ -118,5 +117,5 @@ class Application extends Kinetic.Stage
 
 
 $(() ->
-  app.application = new Application();
+  ns.application = new Application();
 );

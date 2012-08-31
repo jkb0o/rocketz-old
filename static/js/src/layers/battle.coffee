@@ -4,7 +4,7 @@ class Battle extends Kinetic.Layer
     @stage.add(@)
     @setZIndex(zIndex)
     @config = @stage.config
-    @objClasses = app.classes.objects
+    @objClasses = ns.classes.objects
 
   getByClass: (className) ->
     return @get('.'+className)[0]
@@ -15,7 +15,7 @@ class Battle extends Kinetic.Layer
       @drawObject(object, options)
 
   drawObject: (object, options) ->
-    vel = app.utils.velocity(object.userData.vel);
+    vel = ns.utils.velocity(object.userData.vel);
 
     vx = vel[0];
     vy = vel[1];
@@ -41,7 +41,7 @@ class Battle extends Kinetic.Layer
   addObject: (data, options, center) ->
     object = null
 
-    if data.static and !app.config.drawStatic
+    if data.static and !ns.config.drawStatic
       return
 
     switch data.type
@@ -59,7 +59,7 @@ class Battle extends Kinetic.Layer
 
 
   obj_created: (data) ->
-    center = app.utils.worldPoint(data.center)
+    center = ns.utils.worldPoint(data.center)
     options = {
         fill:'black',
         name: data.id,
@@ -95,4 +95,4 @@ class Battle extends Kinetic.Layer
     object.self = true;
     @stage.viewport.target = object;
 
-app.classes.layers.Battle = Battle
+ns.classes.layers.Battle = Battle

@@ -1,3 +1,4 @@
+# coding=utf-8
 # Django settings for game project.
 import os as _os
 
@@ -118,8 +119,12 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    ###########    
-    # core    #
+    ###########
+    #   ^ ^   #
+    # =(о_о)= #
+    #   |-||- #
+    ###########
+    # cote    #
     ###########    
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -181,4 +186,4 @@ GENERATED_MEDIA_DIR = _os.path.join(HOMEDIR, 'htdocs/gm')
 DEV_MEDIA_URL = '/devstatic/'
 GENERATED_MEDIA_NAMES_MODULE = 'web.gm'
 GENERATED_MEDIA_NAMES_FILE = _os.path.join(HOMEDIR, 'web/gm.py')
-MEDIA_COFFEE_WRAPPER = ';(function(app){\n%s\n})(Rocketz);'
+MEDIA_COFFEE_WRAPPER = ';(function(ns, wnd){\n%s\n})(typeof(Rocketz)!="undefined" ? Rocketz : null, window);'
